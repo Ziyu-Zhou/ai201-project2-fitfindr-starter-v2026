@@ -13,8 +13,8 @@
 > python app.py ask 'vintage graphic tee under $30'
 > ```
 >
-> All three tools are stubs, so that last command will do nothing useful yet.
-> That's the starting position.
+> The three tools and planning loop are implemented. The last command searches
+> the mock listings, suggests an outfit, and generates a fit card.
 >
 > **The rest of this file is your submission.** Fill it in as you go.
 
@@ -41,7 +41,10 @@
 
 <!-- Three or four sentences: what a user asks for, and what they get back. -->
 
-
+FitFindr lets a user describe a thrift find and optionally specify a size and budget, such as `graphic tee under $30, size M`.
+It searches 40 local mock listings, filters by those constraints, and selects the item with the most matching keywords.
+The model suggests an outfit using the user's saved wardrobe, or general styling ideas when the wardrobe is empty, then writes a short caption about the find, its price, platform, and outfit.
+If the search finds nothing or the filters are invalid, the agent stops with a message explaining what the user can change.
 
 ---
 
@@ -192,15 +195,17 @@ Channeling full early-2000s mallrat energy with these baggy dark-wash jeans and 
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I asked Codex to implement `suggest_outfit` and `create_fit_card`, then improve readability and add meaningful comments explaining the logic.
+- *What came back:* Codex added prompts that use owned wardrobe pieces or offer general advice for an empty wardrobe. The caption tool returns an explanatory message for a blank outfit without calling the model. Both tools use the shared `generate()` adapter.
+- *What I changed:* I requested the readability and comment passes. The repeated listing formatting was moved into `_format_listing`, which omits unknown brands without changing the original listing, and the empty-input branches received explanatory comments. I then asked Codex to run each tool from a terminal and paste the actual commands and outputs into **Sample Run** above.
 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I asked Codex to explain Milestone 5 and the decisions involved, then approved regex parsing, explicit search/outfit/caption stages, and clear errors for invalid filters.
+- *What came back:* Codex implemented `_parse_query` and `run_agent`. The loop saves each result in the session, chooses the first ranked listing, checks the iteration limit before each stage, and stops before the model tools when search returns no listings.
+- *What I changed:* I chose regex so parsing would not need another model call, and accepted rejection of invalid budgets rather than silently ignoring them. I also asked why the direct `config` import was removed from `agent.py`; the iteration limit still reads `config.MAX_ITERATIONS` inside `trace.check_iterations`. Seven automated tests and the terminal runs verify parsing, state handoffs, early stops, and the iteration limit; these are checks of the build, not the five-trial Unit 4 evaluation.
+
+**Submission repository:** [Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026](https://github.com/Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026). Use this same repository for Unit 4. The local Unit 3 work is complete; push the commits and submit this URL through the course submission page.
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
 
@@ -344,14 +349,14 @@ full. -->
 
      SUBMISSION CHECKLIST — unit 3
 
-       [ ] criteria.md has five numbered criteria, each with a target
-       [ ] Each criterion has a reason underneath it
-       [ ] All five unit 3 sections above have real content
-       [ ] Tool Inventory: all three tools, inputs WITH TYPES, a specific
+       [x] criteria.md has five numbered criteria, each with a target
+       [x] Each criterion has a reason underneath it
+       [x] All five unit 3 sections above have real content
+       [x] Tool Inventory: all three tools, inputs WITH TYPES, a specific
            return value, and the empty case
-       [ ] Planning Loop names the branch rule and agent.py::run_agent
-       [ ] Sample Run: one full query plus the three per-tool tests, as text
-       [ ] At least four new commits
+       [x] Planning Loop names the branch rule and agent.py::run_agent
+       [x] Sample Run: one full query plus the three per-tool tests, as text
+       [x] At least four new commits
        [ ] Repository URL submitted — WRITE IT DOWN, you submit the same one
            next unit
 

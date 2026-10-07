@@ -59,24 +59,24 @@
 
 ### `search_listings`
 
-- **What it does:**
-- **Inputs:** <!-- name and type each: `max_price` (float), not "a price" -->
-- **Returns:**
-- **When it has nothing:**
+- **What it does:** Searches the local mock listings, applies optional size and budget filters, and ranks the remaining items by keyword overlap with the requested description without calling a model.
+- **Inputs:** `description` (`str`) contains search keywords; `size` (`str | None`, default `None`) is an optional size filter; `max_price` (`float | None`, default `None`) is an optional inclusive price ceiling in dollars. `None` skips that filter. Size matching is case-insensitive: ignore parenthesized fit notes, match complete slash-separated sizes (`M` matches `S/M`, but `L` does not match `XL`), accept `One Size` for one-size listings, match a waist such as `W30` against `W30 L30`, and accept either `8` or `US 8` for shoe size `US 8` without matching `US 8.5`.
+- **Returns:** A `list[dict]` of at most `config.SEARCH_RESULT_LIMIT` listings. Each dictionary contains `id` (`str`), `title` (`str`), `description` (`str`), `category` (`str`), `style_tags` (`list[str]`), `size` (`str`), `condition` (`str`), `price` (`float`), `colors` (`list[str]`), `brand` (`str | None`), and `platform` (`str`). Score each listing by the number of distinct, case-insensitive alphanumeric query words found in its title, description, or style tags; discard zero-score listings, sort highest score first, and preserve dataset order for ties.
+- **When it has nothing:** Returns `[]` when no listing passes the filters and has a positive keyword score, including when the description contains no searchable words; never returns `None` for no matches.
 
 ### `suggest_outfit`
 
-- **What it does:**
-- **Inputs:**
-- **Returns:**
-- **When it has nothing:**
+- **What it does:** Calls the model through `generate()` to suggest one or two outfits combining the selected listing with pieces in the user's wardrobe.
+- **Inputs:** `new_item` (`dict`) is one complete listing returned by `search_listings`; `wardrobe` (`dict`) has an `items` key containing a `list[dict]`, where each wardrobe item has `id` (`str`), `name` (`str`), `category` (`str`), `colors` (`list[str]`), `style_tags` (`list[str]`), and optional `notes` (`str | None`). The `items` list may be empty.
+- **Returns:** A non-empty `str` describing one or two outfits, naming the selected item and the wardrobe pieces used, with a brief explanation of how the pieces work together. The prompt uses available item details without assuming a brand exists.
+- **When it has nothing:** With `wardrobe["items"] == []`, asks the model for general styling advice for the selected item and returns that advice as a non-empty `str`; suggested pieces are ideas, not claims about clothes the user owns.
 
 ### `create_fit_card`
 
-- **What it does:**
-- **Inputs:**
-- **Returns:**
-- **When it has nothing:**
+- **What it does:** Calls the model through `generate()` to turn the selected listing and outfit suggestion into a short caption someone could post about their find.
+- **Inputs:** `outfit` (`str`) is the text returned by `suggest_outfit`; `new_item` (`dict`) is the same complete listing used for that suggestion.
+- **Returns:** A non-empty `str` containing a two-to-four-sentence caption that mentions the item, its price in dollars, and its platform once each, and describes the outfit's specific style. The prompt includes the outfit and item details, omits an unknown brand, and asks for wording tailored to the input rather than a fixed caption.
+- **When it has nothing:** If `outfit` is empty or contains only whitespace, returns the string `Cannot create a fit card without an outfit suggestion. Try generating an outfit first.` without calling the model.
 
 ---
 
@@ -93,7 +93,7 @@
      The grader checks your code against what you claim here, so the file and
      function have to be real. -->
 
-**Branch rule:**
+**Branch rule:** If `search_listings` returns `[]`, set `session["error"]` to `No matching listings. Try different keywords, another size, or a higher budget.` and return the session before calling either remaining tool. Otherwise, save the first result in `session["selected_item"]`, call `suggest_outfit` using that item and `session["wardrobe"]`, save its result in `session["outfit_suggestion"]`, then call `create_fit_card` using that saved suggestion and the same selected item, save its result in `session["fit_card"]`, and return the session. This is the planned rule to implement in Milestone 5.
 
 **Where it lives:** `agent.py::run_agent`
 

@@ -119,19 +119,21 @@ $ python app.py ask '...'
 
 **The three tools, tested one at a time**
 
-```
-$ python -c "from tools import search_listings; print(search_listings('graphic tee', max_price=30))"
+Run these commands from the project directory using its virtual environment. Each block contains the actual terminal output; model responses have their whitespace joined into one line for display.
 
-```
-
-```
-$ python -c "from tools import suggest_outfit; ..."
-
+```text
+$ .venv/bin/python -c "from tools import search_listings; print(search_listings('graphic tee', max_price=30))"
+[{'id': 'lst_002', 'title': 'Y2K Baby Tee — Butterfly Print', 'description': 'Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.', 'category': 'tops', 'style_tags': ['y2k', 'vintage', 'graphic tee', 'cottagecore'], 'size': 'S/M', 'condition': 'excellent', 'price': 18.0, 'colors': ['white', 'pink', 'purple'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_006', 'title': 'Graphic Tee — 2003 Tour Bootleg Style', 'description': 'Vintage-style bootleg tee with faded graphic. Slightly boxy fit. 100% cotton, soft and worn-in.', 'category': 'tops', 'style_tags': ['graphic tee', 'vintage', 'grunge', 'streetwear', 'band tee'], 'size': 'L', 'condition': 'good', 'price': 24.0, 'colors': ['black'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_017', 'title': 'Mesh Long-Sleeve Top — Black', 'description': 'Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.', 'category': 'tops', 'style_tags': ['y2k', 'grunge', 'goth', 'layering'], 'size': 'S/M', 'condition': 'excellent', 'price': 15.0, 'colors': ['black'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_033', 'title': 'Vintage Band Tee — Faded Grey', 'description': 'Faded grey band-style tee with distressed graphic. Crew neck. Fits boxy. Well-loved but no holes or major damage.', 'category': 'tops', 'style_tags': ['vintage', 'grunge', 'band tee', 'graphic tee', 'streetwear'], 'size': 'L', 'condition': 'fair', 'price': 19.0, 'colors': ['grey', 'charcoal'], 'brand': None, 'platform': 'depop'}, {'id': 'lst_011', 'title': 'Low-Rise Cargo Pants — Khaki', 'description': 'Y2K era low-rise cargo pants. Lots of pockets. Khaki color, slightly distressed at the hems. Great for layering with a long tee.', 'category': 'bottoms', 'style_tags': ['y2k', 'cargo', '2000s', 'streetwear'], 'size': 'W29', 'condition': 'fair', 'price': 27.0, 'colors': ['khaki', 'tan'], 'brand': None, 'platform': 'poshmark'}, {'id': 'lst_015', 'title': 'Vintage Graphic Hoodie — Faded Black', 'description': 'Faded black pullover hoodie with barely-visible vintage graphic on the chest. Cozy interior. Some pilling but adds to the worn-in look.', 'category': 'tops', 'style_tags': ['vintage', 'grunge', 'graphic', 'streetwear'], 'size': 'L', 'condition': 'fair', 'price': 26.0, 'colors': ['black', 'charcoal'], 'brand': None, 'platform': 'depop'}]
 ```
 
+```text
+$ .venv/bin/python -c "from tools import suggest_outfit; from utils.data_loader import get_example_wardrobe, load_listings; print(' '.join(suggest_outfit(load_listings()[1], get_example_wardrobe()).split()))"
+Here is an outfit featuring the selected thrifted item, using only your existing wardrobe pieces: ### **Outfit: Y2K Streetwear Contrast** * **Thrifted Item:** Y2K Baby Tee — Butterfly Print * **Wardrobe Pieces Used:** * Baggy straight-leg jeans, dark wash (`w_001`) * Vintage black denim jacket (`w_006`) * Chunky white sneakers (`w_007`) * Black crossbody bag (`w_010`) **Why it works:** * **Colors:** The white, pink, and purple in the butterfly graphic pop against the dark blue and indigo of the jeans, while the black denim jacket and bag ground the pastel tones for a balanced look. The white sneakers tie back to the white base of the baby tee. * **Fit:** This outfit plays on the classic Y2K proportion-play of tight-over-loose. The fitted, cropped nature of the baby tee contrasts sharply with the high-waisted, baggy straight-leg jeans, creating a flattering silhouette. The slightly cropped black denim jacket mirrors the baby tee's length while adding structure. * **Style:** The vintage, graphic-heavy Y2K aesthetic of the tee blends effortlessly with the streetwear elements of the baggy denim and chunky sneakers, resulting in a cohesive, era-inspired look.
 ```
-$ python -c "from tools import create_fit_card; ..."
 
+```text
+$ .venv/bin/python -c "from tools import create_fit_card; from utils.data_loader import load_listings; print(' '.join(create_fit_card('Y2K butterfly baby tee with baggy dark-wash jeans, a vintage black denim jacket, chunky white sneakers, and a black crossbody bag', load_listings()[1]).split()))"
+Channeling full early-2000s mallrat energy with these baggy dark-wash jeans and this little butterfly baby tee. I scored it on depop for $18.00 and it honestly completes my whole denim jacket rotation.
 ```
 
 ---

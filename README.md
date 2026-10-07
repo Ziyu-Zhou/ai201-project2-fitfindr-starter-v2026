@@ -93,13 +93,15 @@
      The grader checks your code against what you claim here, so the file and
      function have to be real. -->
 
-**Branch rule:** If `search_listings` returns `[]`, set `session["error"]` to `No matching listings. Try different keywords, another size, or a higher budget.` and return the session before calling either remaining tool. Otherwise, save the first result in `session["selected_item"]`, call `suggest_outfit` using that item and `session["wardrobe"]`, save its result in `session["outfit_suggestion"]`, then call `create_fit_card` using that saved suggestion and the same selected item, save its result in `session["fit_card"]`, and return the session. This is the planned rule to implement in Milestone 5.
+**Branch rule:** If `search_listings` returns `[]`, set `session["error"]` to `No matching listings. Try different keywords, another size, or a higher budget.` and return the session before calling either remaining tool. Otherwise, save the first result in `session["selected_item"]`, call `suggest_outfit` using that item and `session["wardrobe"]`, save its result in `session["outfit_suggestion"]`, then call `create_fit_card` using that saved suggestion and the same selected item, save its result in `session["fit_card"]`, and return the session. The loop runs one stage per iteration and calls `trace.check_iterations(count)` before each tool; exceeding `config.MAX_ITERATIONS` raises before the next tool runs.
 
 **Where it lives:** `agent.py::run_agent`
 
-**How the query is parsed:** <!-- regex, string splitting, or asking the model — say which -->
+**How the query is parsed:** `agent.py::_parse_query` uses case-insensitive regex, without a model call. It extracts an optional budget such as `under $30` or `under 30.50` and an optional size such as `size M`, `in size S/M`, `size W30`, `size W30 L30`, `size US 8.5`, `size 8`, or `size One Size`. Sizes are normalized to uppercase, with spaces around `/` removed. The filters, separator commas and semicolons, and leading request phrases such as `looking for a` or `find me a` are removed from the description before search. A budget must be a finite, non-negative number without thousands separators. Invalid, missing, or repeated filter values and an empty description set `session["error"]` and stop before any tool runs. For example, `graphic tee under $30, size M` becomes `{"description": "graphic tee", "size": "M", "max_price": 30.0}`.
 
-**What moves through the session:** <!-- which fields, in what order -->
+**What moves through the session:** `new_session` stores the original `query` and `wardrobe`. Parsing fills `parsed`; search reads those filters and fills `search_results`; the first match becomes `selected_item`. The outfit stage reads `selected_item` and `wardrobe`, then fills `outfit_suggestion`. The caption stage reads that saved suggestion and the same `selected_item`, then fills `fit_card`. All tool results remain in the returned session for inspection. On invalid input or an empty search, `error` explains what to change, and stages that did not run keep their fields at `None`.
+
+**Automated checks:** `.venv/bin/python -m unittest discover -s tests -v` checks query parsing, rejected filters, tool ordering, selected-item identity, the empty-search stop, the iteration limit, and an empty wardrobe without live model calls.
 
 ---
 
@@ -112,9 +114,50 @@
 
 **One full query**
 
-```
-$ python app.py ask '...'
+```text
+$ .venv/bin/python app.py ask 'vintage graphic tee under $30, size M'
 
+  Found:    Y2K Baby Tee — Butterfly Print — $18.0 on depop
+
+  Outfit:   Here is an outfit featuring the selected thrifted item, using only your existing wardrobe pieces:
+
+### **Outfit: Y2K Streetwear Contrast**
+
+* **Thrifted Item:** Y2K Baby Tee — Butterfly Print
+* **Wardrobe Pieces Used:**
+  * Baggy straight-leg jeans, dark wash (`w_001`)
+  * Vintage black denim jacket (`w_006`)
+  * Chunky white sneakers (`w_007`)
+  * Black crossbody bag (`w_010`)
+
+**Why it works:**
+* **Colors:** The white, pink, and purple in the butterfly graphic pop against the dark blue and indigo of the jeans, while the black denim jacket and bag ground the pastel tones for a balanced look. The white sneakers tie back to the white base of the baby tee.
+* **Fit:** This outfit plays on the classic Y2K proportion-play of tight-over-loose. The fitted, cropped nature of the baby tee contrasts sharply with the high-waisted, baggy straight-leg jeans, creating a flattering silhouette. The slightly cropped black denim jacket mirrors the baby tee's length while adding structure.
+* **Style:** The vintage, graphic-heavy Y2K aesthetic of the tee blends effortlessly with the streetwear elements of the baggy denim and chunky sneakers, resulting in a cohesive, era-inspired look.
+
+  Fit card: Balanced out this butterfly baby tee with some baggy dark denim and chunky sneakers for the ultimate tight-over-loose Y2K look. Snagged it on depop for just $18.00 and I'm obsessed with how the pink and purple graphics pop against the dark wash.
+
+0 model calls this session, 2 served from cache
+```
+
+This CLI run reused the model responses cached during the preceding `.venv/bin/python agent.py` test.
+
+**Early-stop examples**
+
+```text
+$ .venv/bin/python app.py ask 'designer ballgown size XXS under $5'
+
+  No matching listings. Try different keywords, another size, or a higher budget.
+
+0 model calls this session
+```
+
+```text
+$ .venv/bin/python app.py ask 'graphic tee under $-5'
+
+  Budget must be a finite, non-negative amount.
+
+0 model calls this session
 ```
 
 **The three tools, tested one at a time**

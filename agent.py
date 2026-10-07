@@ -13,10 +13,76 @@ Build and test your three tools in `tools.py` first. Then come here.
     python agent.py          runs both example paths below
 """
 
-import config
+import math
+import re
+
 import trace
 from tools import search_listings, suggest_outfit, create_fit_card
 from generate import ModelUnavailable
+
+
+# Match complete filter values so malformed inputs cannot become partial filters.
+_PRICE_FILTER = re.compile(
+    r"\bunder\s+\$?\s*(?P<price>[+-]?(?:\d+(?:\.\d+)?|\.\d+))(?!,\d)(?=$|[\s,;])",
+    re.IGNORECASE,
+)
+_CLOTHING_SIZE = r"(?:XXXS|XXS|XS|S|M|L|XL|XXL|XXXL)"
+_SIZE_FILTER = re.compile(
+    r"\b(?:in\s+)?size\s+(?P<size>"
+    r"one\s+size|"
+    r"US\s+\d+(?:\.\d+)?|"
+    r"W\d+(?:\s+L\d+)?|"
+    rf"{_CLOTHING_SIZE}(?:\s*/\s*{_CLOTHING_SIZE})?|"
+    r"\d+(?:\.\d+)?)(?!\s*/)(?=$|[\s,;])",
+    re.IGNORECASE,
+)
+
+
+def _parse_query(query: str) -> dict:
+    """Extract one optional budget and size, leaving the item's description."""
+    price_matches = list(_PRICE_FILTER.finditer(query))
+    if len(price_matches) > 1:
+        raise ValueError("Specify only one budget, for example 'under $30'.")
+
+    description = _PRICE_FILTER.sub(" ", query)
+    # A leftover filter keyword means its value was missing or malformed.
+    if re.search(r"\bunder\b", description, re.IGNORECASE):
+        raise ValueError("Use a numeric budget, for example 'under $30'.")
+
+    max_price = None
+    if price_matches:
+        max_price = float(price_matches[0].group("price"))
+        if not math.isfinite(max_price) or max_price < 0:
+            raise ValueError("Budget must be a finite, non-negative amount.")
+
+    size_matches = list(_SIZE_FILTER.finditer(description))
+    if len(size_matches) > 1:
+        raise ValueError("Specify only one size, for example 'size M'.")
+
+    description = _SIZE_FILTER.sub(" ", description)
+    if re.search(r"\bsize\b", description, re.IGNORECASE):
+        raise ValueError(
+            "Use a supported size, such as 'size M', 'size W30', or 'size US 8'."
+        )
+
+    size = None
+    if size_matches:
+        # Normalize separators as well as case so 's / m' matches a listing's S/M.
+        size = " ".join(size_matches[0].group("size").upper().split())
+        size = re.sub(r"\s*/\s*", "/", size)
+
+    # Request phrases should not add common words such as 'for' to search scores.
+    description = re.sub(
+        r"^\s*(?:looking\s+for|find(?:\s+me)?|show(?:\s+me)?)\s+(?:an?\s+)?",
+        "",
+        description,
+        flags=re.IGNORECASE,
+    )
+    description = re.sub(r"[\s,;]+", " ", description).strip()
+    if not re.search(r"[a-z0-9]", description, re.IGNORECASE):
+        raise ValueError("Describe an item to search for, for example 'graphic tee'.")
+
+    return {"description": description, "size": size, "max_price": max_price}
 
 
 # ── session state ─────────────────────────────────────────────────────────────
@@ -63,52 +129,49 @@ def run_agent(query: str, wardrobe: dict) -> dict:
         The session dict. **Check session["error"] first** — if it isn't None,
         the run ended early and the later fields will still be None.
 
-    ─────────────────────────────────────────────────────────────────────────
-    TODO — build this, following the branch rule you wrote in Milestone 2.
+    Regex parsing rejects invalid filters before any tool runs. Each loop
+    iteration performs one stage: search, outfit, or caption. Tool results
+    are saved to the session and read from it by the next stage.
 
-      1. Start a session with new_session().
+    An empty search sets an actionable error and stops before either model
+    tool runs. The iteration guard raises if the configured limit is exceeded.
 
-      2. Count the times round the loop, and call trace.check_iterations(count)
-         on each one before you go again. It raises when the count passes
-         MAX_ITERATIONS in config.py — see trace.py.
-
-      3. Parse the query into a description, a size, and a max_price. Regex,
-         string splitting, or asking the model are all fine — say which you
-         chose in your README. Put the result in session["parsed"].
-
-      4. Call search_listings() with what you parsed.
-         Put the results in session["search_results"].
-
-         ⚠️ THIS IS THE BRANCH. If nothing came back:
-              - put a message in session["error"] saying what the user could
-                change — "No results" is not that message
-              - return the session
-              - do NOT call suggest_outfit with nothing
-
-      5. Choose an item — the first result is fine. Put it in
-         session["selected_item"].
-
-      6. Call suggest_outfit() with the selected item and the wardrobe.
-         Put the result in session["outfit_suggestion"].
-
-      7. Call create_fit_card() with the outfit and the item.
-         Put the result in session["fit_card"].
-
-      8. Return the session.
-
-    ─────────────────────────────────────────────────────────────────────────
-    IN UNIT 4 you come back and add two things:
-
-      • Trace calls. One per step. `trace.step("search_listings", inputs=...,
-        returned=...)` — see trace.py. Your README needs the output.
-
-      • A handler for ModelUnavailable, so a bad key produces a message rather
-        than a stack trace. The import is already at the top of this file.
+    Unit 4 adds trace.step() calls and a handler for ModelUnavailable.
     """
     session = new_session(query, wardrobe)
 
-    # TODO: delete these two lines and build the loop.
-    session["error"] = "The planning loop isn't built yet — see the TODO in agent.py."
+    try:
+        session["parsed"] = _parse_query(session["query"])
+    except ValueError as error:
+        # Invalid constraints should never silently become an unfiltered search.
+        session["error"] = str(error)
+        return session
+
+    for count, stage in enumerate(("search", "outfit", "caption"), start=1):
+        # Check before executing so no tool runs beyond the configured limit.
+        trace.check_iterations(count)
+
+        if stage == "search":
+            session["search_results"] = search_listings(**session["parsed"])
+            if not session["search_results"]:
+                # No selected item exists, so both model stages must be skipped.
+                session["error"] = (
+                    "No matching listings. Try different keywords, another size, "
+                    "or a higher budget."
+                )
+                return session
+            session["selected_item"] = session["search_results"][0]
+
+        elif stage == "outfit":
+            session["outfit_suggestion"] = suggest_outfit(
+                session["selected_item"], session["wardrobe"]
+            )
+
+        else:
+            session["fit_card"] = create_fit_card(
+                session["outfit_suggestion"], session["selected_item"]
+            )
+
     return session
 
 

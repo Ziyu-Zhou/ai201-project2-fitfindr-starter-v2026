@@ -25,9 +25,10 @@ Given a query that matches at least one listing, the agent completes all three
 tool calls and returns a fit card — in at least 4 of 5 tries.
 
 **Why this target:**
-<!-- Why 4 of 5 and not 5 of 5? Something about your search, probably —
-     "my search is a plain keyword match and some phrasings will miss" is a
-     real answer. -->
+The successful path depends on two model calls as well as the local search.
+At least 4 of 5 tries requires reliable completion while allowing one failure
+from an unavailable model or an unusable model response; 5 of 5 would assume
+the external service always succeeds.
 
 ---
 
@@ -37,66 +38,61 @@ Given a query that matches no listings, the agent stops before calling
 `suggest_outfit` and returns a message naming what to change — 5 of 5 tries.
 
 **Why this target:**
-<!-- Why is 5 of 5 reasonable here when criterion 1 isn't? What's different
-     about this path? -->
+This path uses local search and a Python branch, with no model call needed.
+An empty list should always trigger the same stop condition, so even one call
+to the next tool on this path would indicate a bug and 5 of 5 is appropriate.
 
 ---
 
-## 3. Something about state
+## 3. The selected item reaches the outfit tool unchanged in identity
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know that the item your search found is the same item the
-     next tool received? Name something countable or observable.
-
-     This is the criterion people find hardest, because state failure doesn't
-     look like state failure — it looks like a tool problem. Something that
-     compares session["selected_item"] against what actually reached
-     suggest_outfit is the shape you're after. -->
-
-
+Given a query that matches at least one listing, the `new_item["id"]` actually
+received by `suggest_outfit` equals `session["selected_item"]["id"]` — in
+5 of 5 tries. Record the received argument at the tool entry or intercept it
+in a test; inspecting only the final session is not enough. A try that never
+reaches `suggest_outfit` fails this criterion.
 
 **Why this target:**
 
-
+Passing the selected item from the session into a function is controlled by
+Python code, not by the model. There is no acceptable variation in which item
+gets passed, so anything below 5 of 5 would permit a state-handling bug.
 
 ---
 
-## 4. Something about the fit card
+## 4. The fit card includes the item, price, and platform once each
 
-<!-- YOU WRITE THIS ONE.
-
-     The fit card calls a model, so the same input can produce different words
-     each time. That's not a bug — it's the nature of the tool. So what would
-     make it acceptable?
-
-     Think about what you'd actually be unhappy to see. A caption that never
-     mentions the price? Two different items producing the same opening
-     sentence? A card longer than a caption anyone would post? Any of those can
-     be turned into a number. -->
-
-
+For the same selected listing, the generated fit card mentions its full
+`title`, correct dollar price, and `platform` exactly once each — in at least
+4 of 5 tries, with caching disabled. Match the title and platform
+case-insensitively. Count the price as a dollar amount equal to the listing's
+price (`$24` and `$24.00` both count for `24.0`); a conflicting dollar amount
+fails the try. A missing or empty fit card also fails.
 
 **Why this target:**
 
-
+These details let a reader identify the find and know its cost and source.
+The model writes the caption at temperature 0.9, so it may omit or repeat a
+detail even when the prompt requests it; 4 of 5 requires consistent compliance
+without assuming every generated caption follows the instructions perfectly.
 
 ---
 
-## 5. Your choice
+## 5. Search respects the price ceiling without returning only empty results
 
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. Speed, the empty
-     wardrobe path, what happens when the model can't be reached, whether the
-     search respects a price ceiling — anything, as long as it names a number
-     or an observable outcome. -->
-
-
+Run `search_listings` once for each description `graphic tee`, `flannel`,
+`tank`, `belt`, and `vintage`, with `max_price=30.0` and `size=None`.
+Each search returns at least one listing, and every returned listing has
+`price <= 30.0` — in 5 of 5 searches. An empty result fails, because each of
+these descriptions has a matching listing within the budget in the starter
+dataset.
 
 **Why this target:**
 
-
+The price filter is a deterministic numeric comparison on local data, so it
+should never return an item over budget. Requiring a non-empty result also
+prevents an unfinished search that always returns `[]` from passing; there
+is no reason to allow a failure among these five known-match searches.
 
 ---
 

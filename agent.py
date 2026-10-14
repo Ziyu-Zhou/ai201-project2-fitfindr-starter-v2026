@@ -17,7 +17,7 @@ import math
 import re
 
 import trace
-from tools import search_listings, suggest_outfit, create_fit_card
+from tools import suggest_outfit, create_fit_card
 from generate import ModelUnavailable
 import mcp_client
 
@@ -115,7 +115,7 @@ def new_session(query: str, wardrobe: dict) -> dict:
 
 # ── planning loop ─────────────────────────────────────────────────────────────
 
-def run_agent(query: str, wardrobe: dict) -> dict:
+def run_agent(query: str, wardrobe: dict, *, trace_enabled: bool = False) -> dict:
     """
     Run the loop once and return the finished session.
 
@@ -124,6 +124,7 @@ def run_agent(query: str, wardrobe: dict) -> dict:
                   (e.g. "vintage graphic tee under $30, size M").
         wardrobe: a wardrobe dict — get_example_wardrobe() or
                   get_empty_wardrobe() from utils/data_loader.py.
+        trace_enabled: print each tool's inputs and result when True.
 
     Returns:
         The session dict. **Check session["error"] first** — if it isn't None,
@@ -136,8 +137,10 @@ def run_agent(query: str, wardrobe: dict) -> dict:
     An empty search sets an actionable error and stops before either model
     tool runs. The iteration guard raises if the configured limit is exceeded.
 
-    Unit 4 adds trace.step() calls and a handler for ModelUnavailable.
+    Tracing records each completed tool call, including the MCP search and
+    the empty-search branch. Unit 4 also adds a handler for ModelUnavailable.
     """
+    trace.start_trace()
     session = new_session(query, wardrobe)
 
     try:
@@ -153,8 +156,20 @@ def run_agent(query: str, wardrobe: dict) -> dict:
 
         if stage == "search":
             session["search_results"] = mcp_client.call_tool(
-    "search_listings", session["parsed"]
-)
+                "search_listings", session["parsed"]
+            )
+            # Log the actual result before branching, including an empty list.
+            if trace_enabled:
+                trace.step(
+                    "search_listings (via MCP)",
+                    inputs=session["parsed"],
+                    returned=session["search_results"],
+                    note=(
+                        "branch: empty search, stopping before outfit and caption"
+                        if not session["search_results"]
+                        else "branch: use the first ranked listing for the outfit"
+                    ),
+                )
             if not session["search_results"]:
                 # No selected item exists, so both model stages must be skipped.
                 session["error"] = (
@@ -168,11 +183,29 @@ def run_agent(query: str, wardrobe: dict) -> dict:
             session["outfit_suggestion"] = suggest_outfit(
                 session["selected_item"], session["wardrobe"]
             )
+            if trace_enabled:
+                trace.step(
+                    "suggest_outfit",
+                    inputs={
+                        "new_item": session["selected_item"],
+                        "wardrobe": session["wardrobe"],
+                    },
+                    returned=session["outfit_suggestion"],
+                )
 
         else:
             session["fit_card"] = create_fit_card(
                 session["outfit_suggestion"], session["selected_item"]
             )
+            if trace_enabled:
+                trace.step(
+                    "create_fit_card",
+                    inputs={
+                        "new_item": session["selected_item"],
+                        "outfit": session["outfit_suggestion"],
+                    },
+                    returned=session["fit_card"],
+                )
 
     return session
 

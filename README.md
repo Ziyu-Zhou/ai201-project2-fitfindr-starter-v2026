@@ -288,15 +288,44 @@ that produced it:
 
 **Happy path**
 
-```
+Run from the project directory. This is the actual trace printed by
+`agent.py::run_agent`; the CLI also printed the outfit and fit card shown in
+**Sample Run** above. The model responses came from the build cache, while the
+search still ran through MCP.
 
+```text
+$ .venv/bin/python app.py ask 'vintage graphic tee under $30, size M' --trace
+[1] search_listings (via MCP)
+      in:  {description: vintage graphic tee, size: M, max_price: 30.0}
+      out: 8 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black, 90s Silk Slip Dress — Floral, Midi Length … +5 more
+      →    branch: use the first ranked listing for the outfit
+[2] suggest_outfit
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}
+      out: Here is an outfit featuring the selected thrifted item, using only your existing wardrobe pieces:  ### **Outfi…
+[3] create_fit_card
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), outfit: Here is an outfit featuring the selected thrifted item, using only your existing wardrobe pieces:  ### **Outfi…}
+      out: Balanced out this butterfly baby tee with some baggy dark denim and chunky sneakers for the ultimate tight-ove…
+
+0 model calls this session, 2 served from cache
 ```
 
 **Empty search**
 
+```text
+$ .venv/bin/python app.py ask 'designer ballgown size XXS under $5' --trace
+[1] search_listings (via MCP)
+      in:  {description: designer ballgown, size: XXS, max_price: 5.0}
+      out: [] (empty)
+      →    branch: empty search, stopping before outfit and caption
+
+  No matching listings. Try different keywords, another size, or a higher budget.
+
+0 model calls this session
 ```
 
-```
+The empty-search trace has one tool call because the loop stops before
+`suggest_outfit` and `create_fit_card`. Trace calls run only when `--trace` is
+requested, and each run resets the step numbering.
 
 **On the MCP move:** <!-- what changed in your code, and whether anything
 behaved differently afterwards. If the rewire didn't work, say exactly where it

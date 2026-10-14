@@ -508,26 +508,159 @@ full. -->
 
      `python run_eval.py --label after` -->
 
-**What I changed:**
+**What I changed:** Rewrote only the caption prompt in
+`tools.py::create_fit_card`. The original instruction to "mention the item"
+became "Include the exact full listing title once, verbatim. Do not shorten
+or paraphrase it." The prompt also supplies an explicit
+`Exact title to include: ...` line using `new_item["title"]`. The caption still
+asks for the correct dollar price and platform once each and a natural
+description of the outfit.
 
-**Which failure it was meant to fix:**
+**Which failure it was meant to fix:** Criterion 4 passed 0 of 5 baseline tries
+because the model paraphrased the item instead of copying its full title, even
+though the correct title reached the caption tool in every try. The change makes
+the exact-title requirement explicit at that same step.
+
+The after-run uses the same scenarios, original criteria and targets, model,
+temperature 0.9, iteration limit, and search settings. Both evaluations disable
+caching. The source hashes and a comparison of the Python code confirm that the
+caption prompt is the only behavioral change between the two runs.
 
 ### Run Log — After
 
+Executed from the project directory after the single prompt change:
+
+```bash
+.venv/bin/python -u run_eval.py --label after
+```
+
 | Criterion | Target | Try 1 | Try 2 | Try 3 | Try 4 | Try 5 | Verdict |
 |---|---|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |  |  |
+| 1. Matching query completes all three tools | 4 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 2. Impossible query stops before the second tool | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 3. Selected item reaches the outfit tool unchanged in identity | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 4. Fit card includes full title, price, and platform once each | 4 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 5. Known-match searches return nonempty results within the price ceiling | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
 
-**Did it help, and how do I know:**
+**Before and after, compared against the original targets**
 
-<!-- If it made things worse, say that. Honestly reported, that earns full
-     credit and is more interesting than one that worked. -->
+| Criterion | Target | Before | After |
+|---|---|---|---|
+| 1. Matching query completes all three tools | 4 of 5 | MET (5/5) | MET (5/5) |
+| 2. Impossible query stops before the second tool | 5 of 5 | MET (5/5) | MET (5/5) |
+| 3. Selected item reaches the outfit tool unchanged in identity | 5 of 5 | MET (5/5) | MET (5/5) |
+| 4. Fit card includes full title, price, and platform once each | 4 of 5 | MISSED (0/5) | MET (5/5) |
+| 5. Known-match searches return nonempty results within the price ceiling | 5 of 5 | MET (5/5) | MET (5/5) |
 
+- [Before: complete run log](results/run_2026-10-13_224415_before.md)
+- [After: complete run log](results/run_2026-10-13_232157_after.md)
+- [After: raw sessions, tool-entry arguments, responses, and source hashes](results/run_2026-10-13_232157_after.json)
+- After-run usage: **40 uncached model calls**, 30,044 prompt tokens and 6,934 output tokens.
+- The extra empty-wardrobe diagnostic completed all five tries with nonempty
+  outfit advice and a fit card. It is separate from the five scored criteria.
 
+**Real output from one after-run try per criterion**
+
+The following excerpts come from the saved first try of each scenario. Result
+formatting is produced by `run_eval.py::write_report`; each result's source is
+named below. The full log and raw evidence preserve all five tries.
+
+**1. Full three-tool run — `agent.py::run_agent` and `tools.py::create_fit_card`**
+
+```text
+[1] search_listings (via MCP)
+      in:  {description: vintage graphic tee, size: None, max_price: 30.0}
+      out: 10 items: Y2K Baby Tee — Butterfly Print, Graphic Tee — 2003 Tour Bootleg Style, Vintage Band Tee — Faded Grey … +7 more
+      →    branch: use the first ranked listing for the outfit
+[2] suggest_outfit
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}
+      out: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  **Selected Thri…
+[3] create_fit_card
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), outfit: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  **Selected Thri…}
+      out: Channeling pure nostalgic streetwear energy by pairing this fitted little top with baggy dark wash denim and m…
+
+Fit card:
+Channeling pure nostalgic streetwear energy by pairing this fitted little top with baggy dark wash denim and my favorite chunky sneakers. I just scored this Y2K Baby Tee — Butterfly Print on depop for $18.00 and it instantly unlocked the ultimate early-2000s outfit vibe.
+```
+
+**2. Empty-search stop — `agent.py::run_agent`**
+
+```text
+[1] search_listings (via MCP)
+      in:  {description: designer ballgown, size: XXS, max_price: 5.0}
+      out: [] (empty)
+      →    branch: empty search, stopping before outfit and caption
+
+No matching listings. Try different keywords, another size, or a higher budget.
+```
+
+**3. Actual received item — `run_eval.py::run_once`, intercepting `tools.py::suggest_outfit`**
+
+```text
+- selected_item: lst_002 — Y2K Baby Tee — Butterfly Print ($18.0, depop)
+search_listings (via MCP); returned successfully
+suggest_outfit; received new_item.id=lst_002; returned successfully
+create_fit_card; received new_item.id=lst_002; returned successfully
+```
+
+**4. Caption details — `tools.py::create_fit_card`**
+
+```text
+Channeling all the early-2000s streetwear energy today by styling my Y2K Baby Tee — Butterfly Print with baggy dark wash jeans and a black denim jacket. I scored this fitted little graphic top on depop for just $18.00, and it balances out the loose bottoms so well.
+```
+
+This caption contains `Y2K Baby Tee — Butterfly Print`, `$18.00`, and `depop`
+exactly once each. Every criterion-4 after-run caption satisfies the same checks;
+all five captions are distinct and came from fresh model calls.
+
+**5. Budget searches — `mcp_server.py::search_listings`, delegating to `tools.py::search_listings`**
+
+```text
+{'description': 'graphic tee', 'size': None, 'max_price': 30.0}
+lst_002: Y2K Baby Tee — Butterfly Print — $18.00
+lst_006: Graphic Tee — 2003 Tour Bootleg Style — $24.00
+lst_017: Mesh Long-Sleeve Top — Black — $15.00
+lst_033: Vintage Band Tee — Faded Grey — $19.00
+lst_011: Low-Rise Cargo Pants — Khaki — $27.00
+lst_015: Vintage Graphic Hoodie — Faded Black — $26.00
+
+{'description': 'flannel', 'size': None, 'max_price': 30.0}
+lst_003: Oversized Flannel Shirt — Plaid Red/Black — $22.00
+
+{'description': 'tank', 'size': None, 'max_price': 30.0}
+lst_023: Crochet Halter Top — Cream — $22.00
+
+{'description': 'belt', 'size': None, 'max_price': 30.0}
+lst_014: Leather Belt — Brown, Braided — $12.00
+
+{'description': 'vintage', 'size': None, 'max_price': 30.0}
+lst_002: Y2K Baby Tee — Butterfly Print — $18.00
+lst_003: Oversized Flannel Shirt — Plaid Red/Black — $22.00
+lst_006: Graphic Tee — 2003 Tour Bootleg Style — $24.00
+lst_012: Oversized Crewneck Sweatshirt — Vintage Navy — $20.00
+lst_013: 90s Silk Slip Dress — Floral, Midi Length — $30.00
+lst_014: Leather Belt — Brown, Braided — $12.00
+lst_015: Vintage Graphic Hoodie — Faded Black — $26.00
+lst_016: High-Waisted Denim Shorts — Cutoff — $24.00
+lst_020: Henley Long Sleeve — Washed Burgundy — $16.00
+lst_021: Straight Leg Khaki Trousers — Olive — $29.00
+
+```
+
+Every search is nonempty and every returned price is within $30.00 in all five
+after-run trials, as in the baseline.
+
+**Did it help, and how do I know:** The prompt change helped: criterion 4
+improved from 0 of 5 to 5 of 5 passes against its unchanged 4-of-5 target,
+and the other four criteria remained at 5 of 5.
+
+The baseline supplied the full title but allowed an item description; every
+baseline caption shortened it. After the prompt explicitly required the full
+title verbatim, every evaluated caption copied it exactly once while also
+including the correct price and platform once. The identical scenarios and
+scoring rules, uncached requests, and source hashes support this comparison.
+This is evidence from five trials for this selected listing, rather than a
+claim that every future caption for every listing will comply.
 
 ---
 
@@ -564,7 +697,7 @@ full. -->
        [x] A diagnosis for every miss, naming a place AND a mechanism
        [ ] Loop Trace, with the MCP call visible in it
        [ ] All three failure modes triggered and handled
-       [ ] One improvement, with Run Log — After in the same format
+       [x] One improvement, with Run Log — After in the same format
        [ ] What's Still Broken
        [ ] At least four new commits
        [ ] The SAME repository URL as last unit

@@ -29,9 +29,14 @@ mode — caching is what usually explains it.
 """
 
 import argparse
+from copy import deepcopy
 import datetime as dt
+import hashlib
+import json
 import sys
 import traceback
+from unittest.mock import patch
+from zoneinfo import ZoneInfo
 
 import config
 import scenarios as scenario_module
@@ -39,26 +44,95 @@ import scenarios as scenario_module
 
 def run_once(scenario, use_trace=True):
     """One scenario, one try. Returns everything worth recording."""
-    from agent import run_agent
+    import agent
+    import generate
+    import mcp_client
     from utils.data_loader import get_example_wardrobe, get_empty_wardrobe
     import trace as trace_module
 
-    wardrobe = (
-        get_empty_wardrobe() if scenario["wardrobe"] == "empty" else get_example_wardrobe()
-    )
+    trace_module.start_trace()
+    record = {
+        "session": None, "trace": "", "crashed": None,
+        "tool_calls": [], "search_checks": [],
+        "cache_enabled": config.CACHE_ENABLED,
+    }
+    calls_before = generate.call_count()
 
-    if use_trace:
-        trace_module.start_trace()
+    def observe(name, implementation, inputs):
+        # Record arguments at tool entry, then run the REAL implementation.
+        # This catches a wrong handoff even when the final session looks right.
+        entry = {"name": name, "inputs": deepcopy(inputs)}
+        record["tool_calls"].append(entry)
+        try:
+            returned = implementation()
+        except Exception as exc:
+            entry["error"] = f"{type(exc).__name__}: {exc}"
+            raise
+        entry["returned"] = deepcopy(returned)
+        return returned
 
-    record = {"error": None, "session": None, "trace": "", "crashed": None}
+    real_search = mcp_client.call_tool
+    real_outfit = agent.suggest_outfit
+    real_caption = agent.create_fit_card
+    real_session = agent.new_session
+
+    def observed_search(name, arguments):
+        return observe(
+            f"{name} (via MCP)", lambda: real_search(name, arguments), arguments,
+        )
+
+    def observed_outfit(new_item, wardrobe):
+        return observe(
+            "suggest_outfit", lambda: real_outfit(new_item, wardrobe),
+            {"new_item": new_item, "wardrobe": wardrobe},
+        )
+
+    def observed_caption(outfit, new_item):
+        return observe(
+            "create_fit_card", lambda: real_caption(outfit, new_item),
+            {"outfit": outfit, "new_item": new_item},
+        )
+
+    def observed_session(query, wardrobe):
+        # Keep partial state if a later model call raises an exception.
+        session = real_session(query, wardrobe)
+        record["session"] = session
+        return session
+
     try:
-        record["session"] = run_agent(scenario["query"], wardrobe)
+        if scenario.get("kind") == "search_batch":
+            for description in scenario["descriptions"]:
+                arguments = {
+                    "description": description, "size": scenario["size"],
+                    "max_price": scenario["max_price"],
+                }
+                listings = observed_search("search_listings", arguments)
+                record["search_checks"].append({
+                    "inputs": arguments, "listings": listings,
+                })
+                if use_trace:
+                    trace_module.step(
+                        "search_listings (via MCP)", inputs=arguments, returned=listings,
+                    )
+        else:
+            wardrobe = (
+                get_empty_wardrobe()
+                if scenario["wardrobe"] == "empty" else get_example_wardrobe()
+            )
+            with patch.object(mcp_client, "call_tool", observed_search), \
+                    patch.object(agent, "suggest_outfit", observed_outfit), \
+                    patch.object(agent, "create_fit_card", observed_caption), \
+                    patch.object(agent, "new_session", observed_session):
+                record["session"] = agent.run_agent(
+                    scenario["query"], wardrobe, trace_enabled=use_trace,
+                )
     except Exception as exc:  # noqa: BLE001 — a crash is a result worth logging
         record["crashed"] = f"{type(exc).__name__}: {exc}"
         record["traceback"] = traceback.format_exc()
 
     if use_trace:
         record["trace"] = trace_module.get_trace()
+    record["model_calls"] = generate.call_count() - calls_before
 
     return record
 
@@ -89,17 +163,46 @@ def main():
     print("Cache is OFF for this run — that's deliberate.\n")
 
     rows = []
+    started = dt.datetime.now(ZoneInfo("America/Los_Angeles"))
+    stamp = started.strftime("%Y-%m-%d_%H%M%S")
+    label = f"_{args.label}" if args.label else ""
+    config.RESULTS_DIR.mkdir(exist_ok=True)
+    path = config.RESULTS_DIR / f"run_{stamp}{label}.md"
+    metadata = {
+        "started": started.isoformat(), "model": config.MODEL,
+        "temperature": config.TEMPERATURE, "cache_enabled": False,
+        "tries_per_scenario": args.tries,
+        "source_sha256": {
+            name: hashlib.sha256((config.ROOT / name).read_bytes()).hexdigest()
+            for name in (
+                "agent.py", "tools.py", "mcp_server.py", "mcp_client.py",
+                "generate.py", "config.py", "trace.py", "criteria.md",
+                "scenarios.py", "run_eval.py",
+            )
+        },
+    }
     for scenario in scenario_module.SCENARIOS:
-        print(f"{scenario['name']}  ({scenario['wardrobe']} wardrobe)")
-        print(f"  query: {scenario['query']}")
+        print(scenario["name"])
+        if scenario.get("kind") == "search_batch":
+            print(f"  descriptions: {', '.join(scenario['descriptions'])}")
+        else:
+            print(f"  query: {scenario['query']} ({scenario['wardrobe']} wardrobe)")
 
         tries = []
+        rows.append({"scenario": scenario, "tries": tries})
         for attempt in range(1, args.tries + 1):
             record = run_once(scenario)
             tries.append(record)
+            # Save raw evidence after each try, even if a long run is interrupted.
+            path.with_suffix(".json").write_text(
+                json.dumps({"metadata": metadata, "rows": rows}, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
 
             if record["crashed"]:
                 print(f"  try {attempt}: CRASHED — {record['crashed']}")
+            elif scenario.get("kind") == "search_batch":
+                print(f"  try {attempt}: completed {len(record['search_checks'])} searches")
             else:
                 session = record["session"] or {}
                 if session.get("error"):
@@ -108,17 +211,13 @@ def main():
                     card = (session.get("fit_card") or "")
                     print(f"  try {attempt}: completed — fit card {len(card)} chars")
 
-        rows.append({"scenario": scenario, "tries": tries})
         print()
 
-    write_report(rows, args)
+    write_report(rows, args, path, metadata)
 
 
-def write_report(rows, args):
+def write_report(rows, args, path, metadata):
     config.RESULTS_DIR.mkdir(exist_ok=True)
-    stamp = dt.datetime.now().strftime("%Y-%m-%d_%H%M")
-    label = f"_{args.label}" if args.label else ""
-    path = config.RESULTS_DIR / f"run_{stamp}{label}.md"
 
     n = args.tries
     headers = " | ".join(f"Try {i}" for i in range(1, n + 1))
@@ -131,7 +230,8 @@ def write_report(rows, args):
         "- Loop: `agent.py::run_agent` · tools: `tools.py`",
         f"- Tries per scenario: {n}, caching off",
         f"- Temperature: {config.TEMPERATURE}",
-        f"- When: {dt.datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"- Started: {metadata['started']} (America/Los_Angeles)",
+        f"- Complete raw tool arguments and results: `{path.with_suffix('.json').name}`",
         "",
         "Paste the table below into your README. Fill in the Criterion and",
         "Target columns from `criteria.md`, then mark each try PASS or FAIL",
@@ -172,27 +272,48 @@ def write_report(rows, args):
 
     for row in rows:
         scenario = row["scenario"]
-        lines += [f"### {scenario['name']}", "",
-                  f"- Query: `{scenario['query']}`",
-                  f"- Wardrobe: {scenario['wardrobe']}", ""]
+        lines += [f"### {scenario['name']}", ""]
+        if scenario.get("kind") == "search_batch":
+            lines += [f"- Descriptions: {', '.join(scenario['descriptions'])}",
+                      f"- Price ceiling: ${scenario['max_price']:.2f}; size: None", ""]
+        else:
+            lines += [f"- Query: `{scenario['query']}`",
+                      f"- Wardrobe: {scenario['wardrobe']}", ""]
 
         for i, record in enumerate(row["tries"], 1):
             lines.append(f"**Try {i}**")
             lines.append("")
 
+            lines += [f"- Model calls: {record['model_calls']}; cache enabled: {record['cache_enabled']}", ""]
+            lines += ["Observed tool entries (`run_eval.py::run_once`, real calls):", "", "```text"]
+            for call in record["tool_calls"]:
+                inputs = call["inputs"]
+                item = inputs.get("new_item")
+                received = f"; received new_item.id={item.get('id')}" if item else ""
+                outcome = f"error={call['error']}" if "error" in call else "returned successfully"
+                lines.append(f"{call['name']}{received}; {outcome}")
+            lines += ["```", ""]
+
             if record["crashed"]:
                 lines += ["Crashed:", "", "```", record["crashed"], "```", ""]
-                continue
 
             session = record["session"] or {}
             item = session.get("selected_item") or {}
             lines += [
                 f"- stopped early: {'yes — ' + str(session.get('error')) if session.get('error') else 'no'}",
-                f"- selected_item: {item.get('title', '(none)')}"
+                f"- selected_item: {item.get('id', '(none)')} — {item.get('title', '(none)')}"
                 + (f" (${item.get('price')}, {item.get('platform')})" if item else ""),
                 f"- search_results: {len(session.get('search_results') or [])}",
                 "",
             ]
+            for check in record["search_checks"]:
+                lines += ["Search inputs and every returned price (`mcp_server.py::search_listings`):",
+                          "", "```text", repr(check["inputs"])]
+                lines += [f"{listing['id']}: {listing['title']} — ${listing['price']:.2f}"
+                          for listing in check["listings"]]
+                if not check["listings"]:
+                    lines.append("[] (empty)")
+                lines += ["```", ""]
             if session.get("outfit_suggestion"):
                 lines += ["Outfit suggestion:", "", "```",
                           str(session["outfit_suggestion"]), "```", ""]

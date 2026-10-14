@@ -225,20 +225,134 @@ Channeling full early-2000s mallrat energy with these baggy dark-wash jeans and 
      `python run_eval.py --label before` runs everything and writes the table
      into results/. Paste it here and fill in the verdicts. -->
 
+Executed from the project directory:
+
+```bash
+.venv/bin/python -u run_eval.py --label before
+```
+
 | Criterion | Target | Try 1 | Try 2 | Try 3 | Try 4 | Try 5 | Verdict |
 |---|---|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |  |  |
+| 1. Matching query completes all three tools | 4 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 2. Impossible query stops before the second tool | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 3. Selected item reaches the outfit tool unchanged in identity | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
+| 4. Fit card includes full title, price, and platform once each | 4 of 5 | FAIL | FAIL | FAIL | FAIL | FAIL | MISSED (0/5) |
+| 5. Known-match searches return nonempty results within the price ceiling | 5 of 5 | PASS | PASS | PASS | PASS | PASS | MET (5/5) |
 
-**Real output from one try**, pasted as text, naming the file and function
-that produced it:
+**Evaluation protocol and evidence**
+
+The original criteria and targets in `criteria.md` are unchanged. Each numbered
+scenario ran five times with caching off and temperature 0.9. Tool-entry wrappers
+in `run_eval.py::run_once` recorded the actual arguments and then called the real
+implementations; they did not replace model responses. The source hashes in the
+raw evidence confirm the agent, tools, prompts, and evaluation configuration
+stayed fixed during the run.
+
+For criterion 5, each try repeats the complete set of five descriptions in the
+original criterion, with `size=None` and `max_price=30.0`. A try passes only when
+all five searches return at least one listing and every returned price is within
+the ceiling. This gives 25 actual MCP searches, with no model calls for that row.
+The empty-wardrobe scenario also ran five times as an ungraded diagnostic; all
+five runs returned nonempty outfit advice and a fit card.
+
+- [Full run log](results/run_2026-10-13_224415_before.md)
+- [Raw sessions, received tool arguments, results, and source hashes](results/run_2026-10-13_224415_before.json)
+- Usage: **40 uncached model calls**, 30,158 prompt tokens and 7,539 output tokens.
+- Every model-backed try made two live requests; the five criterion-4 captions
+  were distinct. Identical search-only results are expected from deterministic data.
+
+**Real output from one try of each criterion**
+
+These excerpts come from the saved first try for each numbered scenario. The
+report formatting is produced by `run_eval.py::write_report`; the source of each
+result is named below.
+
+**1. Full three-tool run — `agent.py::run_agent` and `tools.py::create_fit_card`**
+
+```text
+[1] search_listings (via MCP)
+      in:  {description: vintage graphic tee, size: None, max_price: 30.0}
+      out: 10 items: Y2K Baby Tee — Butterfly Print, Graphic Tee — 2003 Tour Bootleg Style, Vintage Band Tee — Faded Grey … +7 more
+      →    branch: use the first ranked listing for the outfit
+[2] suggest_outfit
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}
+      out: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  * **Selected Th…
+[3] create_fit_card
+      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), outfit: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  * **Selected Th…}
+      out: Found my absolute dream Y2K baby tee with the cutest butterfly graphic and had to style it right away with bag…
+
+Fit card:
+Found my absolute dream Y2K baby tee with the cutest butterfly graphic and had to style it right away with baggy denim and chunky sneakers. It gives major early 2000s streetwear energy and fits like an absolute dream. Snagged this gem for just $18.00 and I'm honestly never taking it off. Listing it over on depop if anyone else needs a little nostalgia in their wardrobe!
+```
+
+**2. Empty-search stop — `agent.py::run_agent`**
+
+```text
+[1] search_listings (via MCP)
+      in:  {description: designer ballgown, size: XXS, max_price: 5.0}
+      out: [] (empty)
+      →    branch: empty search, stopping before outfit and caption
+
+No matching listings. Try different keywords, another size, or a higher budget.
+```
+
+**3. Actual received item — `run_eval.py::run_once`, intercepting `tools.py::suggest_outfit`**
+
+```text
+- selected_item: lst_002 — Y2K Baby Tee — Butterfly Print ($18.0, depop)
+search_listings (via MCP); returned successfully
+suggest_outfit; received new_item.id=lst_002; returned successfully
+create_fit_card; received new_item.id=lst_002; returned successfully
+```
+
+The captured outfit-tool entry ID equals the final selected-item ID in every try.
+
+**4. Caption details — `tools.py::create_fit_card`**
+
+```text
+Obsessed with how the pink and purple butterfly graphic pops against this oversized dark denim. Scored this little baby tee for $18.00 and it balances out baggy jeans so well. Just listed it on depop if anyone else wants to lean into the nostalgic streetwear look!
+```
+
+This try mentions `$18.00` and `depop` once each, but does not include the full
+title `Y2K Baby Tee — Butterfly Print`. The same full-title omission occurs in all
+five tries, so all five fail under the original criterion.
+
+**5. Budget searches — `mcp_server.py::search_listings`, delegating to `tools.py::search_listings`**
+
+```text
+{'description': 'graphic tee', 'size': None, 'max_price': 30.0}
+lst_002: Y2K Baby Tee — Butterfly Print — $18.00
+lst_006: Graphic Tee — 2003 Tour Bootleg Style — $24.00
+lst_017: Mesh Long-Sleeve Top — Black — $15.00
+lst_033: Vintage Band Tee — Faded Grey — $19.00
+lst_011: Low-Rise Cargo Pants — Khaki — $27.00
+lst_015: Vintage Graphic Hoodie — Faded Black — $26.00
+
+{'description': 'flannel', 'size': None, 'max_price': 30.0}
+lst_003: Oversized Flannel Shirt — Plaid Red/Black — $22.00
+
+{'description': 'tank', 'size': None, 'max_price': 30.0}
+lst_023: Crochet Halter Top — Cream — $22.00
+
+{'description': 'belt', 'size': None, 'max_price': 30.0}
+lst_014: Leather Belt — Brown, Braided — $12.00
+
+{'description': 'vintage', 'size': None, 'max_price': 30.0}
+lst_002: Y2K Baby Tee — Butterfly Print — $18.00
+lst_003: Oversized Flannel Shirt — Plaid Red/Black — $22.00
+lst_006: Graphic Tee — 2003 Tour Bootleg Style — $24.00
+lst_012: Oversized Crewneck Sweatshirt — Vintage Navy — $20.00
+lst_013: 90s Silk Slip Dress — Floral, Midi Length — $30.00
+lst_014: Leather Belt — Brown, Braided — $12.00
+lst_015: Vintage Graphic Hoodie — Faded Black — $26.00
+lst_016: High-Waisted Denim Shorts — Cutoff — $24.00
+lst_020: Henley Long Sleeve — Washed Burgundy — $16.00
+lst_021: Straight Leg Khaki Trousers — Olive — $29.00
 
 ```
 
-```
+Every search is nonempty; the highest returned price is $30.00. All five trials
+satisfy both parts of the original budget criterion.
 
 ---
 

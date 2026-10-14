@@ -29,24 +29,34 @@ SCENARIOS = [
         "criterion": 2,
     },
     {
+        "name": "selected item reaches outfit tool unchanged",
+        "query": "vintage graphic tee under $30",
+        "wardrobe": "example",
+        "criterion": 3,
+    },
+    {
+        # Repeating this scenario five times keeps the selected listing fixed.
+        "name": "fit card includes full title, price, and platform once",
+        "query": "graphic tee under $30, size M",
+        "wardrobe": "example",
+        "criterion": 4,
+    },
+    {
+        # Each try runs all five searches from criterion 5, without model calls.
+        "name": "five known-match searches respect the price ceiling",
+        "kind": "search_batch",
+        "descriptions": ["graphic tee", "flannel", "tank", "belt", "vintage"],
+        "size": None,
+        "max_price": 30.0,
+        "criterion": 5,
+    },
+    {
         # A user with nothing saved. One of unit 4's three failure modes.
         "name": "empty wardrobe",
         "query": "denim jacket under $50",
         "wardrobe": "empty",
         "criterion": None,
     },
-    # TODO: add what your criteria 3, 4 and 5 need.
-    #
-    # Set "criterion" to the number in criteria.md that the scenario tests.
-    # "criterion": None means a diagnostic run — useful to have, but it isn't
-    # one of your five, and run_eval.py marks it as such in the table.
-    #
-    # For a state criterion, any normal query works — what you're checking is
-    # what ends up in the session, not what the user typed.
-    #
-    # For a fit-card criterion, you probably want the SAME query listed more
-    # than once, or several different items, depending on what your criterion
-    # actually says.
 ]
 
 WARDROBES = ("example", "empty")
@@ -56,6 +66,19 @@ def validate() -> list[str]:
     """Complain about anything malformed, before a long run rather than during."""
     problems = []
     for i, scenario in enumerate(SCENARIOS, 1):
+        kind = scenario.get("kind", "agent")
+        if kind == "search_batch":
+            descriptions = scenario.get("descriptions")
+            if not isinstance(descriptions, list) or not descriptions or any(
+                not isinstance(description, str) or not description.strip()
+                for description in descriptions
+            ):
+                problems.append(f"scenario {i} needs nonempty search descriptions")
+            if not isinstance(scenario.get("max_price"), (int, float)):
+                problems.append(f"scenario {i} needs a numeric max_price")
+            continue
+        if kind != "agent":
+            problems.append(f"scenario {i} has unknown kind {kind!r}")
         if not scenario.get("query", "").strip():
             problems.append(f"scenario {i} has no query")
         if scenario.get("wardrobe") not in WARDROBES:

@@ -50,7 +50,8 @@ class AgentFlowTests(unittest.TestCase):
 
     def test_matching_query_runs_tools_in_order_and_preserves_state(self):
         calls = Mock()
-        with patch.object(agent, "search_listings", return_value=[self.item]) as search, \
+        # Search now enters through the MCP client rather than the local function.
+        with patch.object(agent.mcp_client, "call_tool", return_value=[self.item]) as search, \
                 patch.object(agent, "suggest_outfit", return_value="A styled outfit.") as outfit, \
                 patch.object(agent, "create_fit_card", return_value="A fit card.") as caption, \
                 patch.object(agent.trace, "check_iterations", wraps=agent.trace.check_iterations) as guard:
@@ -59,7 +60,10 @@ class AgentFlowTests(unittest.TestCase):
             session = agent.run_agent("graphic tee under $30, size M", self.wardrobe)
 
         self.assertEqual([call[0] for call in calls.mock_calls], ["search", "outfit", "caption"])
-        search.assert_called_once_with(description="graphic tee", size="M", max_price=30.0)
+        search.assert_called_once_with(
+            "search_listings",
+            {"description": "graphic tee", "size": "M", "max_price": 30.0},
+        )
         self.assertIs(outfit.call_args.args[0], session["selected_item"])
         self.assertIs(outfit.call_args.args[1], session["wardrobe"])
         caption.assert_called_once_with(session["outfit_suggestion"], session["selected_item"])
@@ -83,7 +87,7 @@ class AgentFlowTests(unittest.TestCase):
             self.assertIsNone(session[field])
 
     def test_invalid_filters_stop_before_search(self):
-        with patch.object(agent, "search_listings") as search, \
+        with patch.object(agent.mcp_client, "call_tool") as search, \
                 patch.object(agent, "suggest_outfit") as outfit, \
                 patch.object(agent, "create_fit_card") as caption:
             session = agent.run_agent("tee under $-5", self.wardrobe)
@@ -96,13 +100,16 @@ class AgentFlowTests(unittest.TestCase):
 
     def test_iteration_limit_prevents_the_next_tool_from_running(self):
         with patch.object(config, "MAX_ITERATIONS", 1), \
-                patch.object(agent, "search_listings", return_value=[self.item]) as search, \
+                patch.object(agent.mcp_client, "call_tool", return_value=[self.item]) as search, \
                 patch.object(agent, "suggest_outfit") as outfit, \
                 patch.object(agent, "create_fit_card") as caption:
             with self.assertRaisesRegex(RuntimeError, "MAX_ITERATIONS"):
                 agent.run_agent("graphic tee", self.wardrobe)
 
-        search.assert_called_once()
+        search.assert_called_once_with(
+            "search_listings",
+            {"description": "graphic tee", "size": None, "max_price": None},
+        )
         outfit.assert_not_called()
         caption.assert_not_called()
 

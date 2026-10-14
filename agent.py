@@ -19,7 +19,7 @@ import re
 import trace
 from tools import search_listings, suggest_outfit, create_fit_card
 from generate import ModelUnavailable
-
+import mcp_client
 
 # Match complete filter values so malformed inputs cannot become partial filters.
 _PRICE_FILTER = re.compile(
@@ -152,7 +152,9 @@ def run_agent(query: str, wardrobe: dict) -> dict:
         trace.check_iterations(count)
 
         if stage == "search":
-            session["search_results"] = search_listings(**session["parsed"])
+            session["search_results"] = mcp_client.call_tool(
+    "search_listings", session["parsed"]
+)
             if not session["search_results"]:
                 # No selected item exists, so both model stages must be skipped.
                 session["error"] = (

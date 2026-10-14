@@ -205,7 +205,19 @@ Channeling full early-2000s mallrat energy with these baggy dark-wash jeans and 
 - *What came back:* Codex implemented `_parse_query` and `run_agent`. The loop saves each result in the session, chooses the first ranked listing, checks the iteration limit before each stage, and stops before the model tools when search returns no listings.
 - *What I changed:* I chose regex so parsing would not need another model call, and accepted rejection of invalid budgets rather than silently ignoring them. I also asked why the direct `config` import was removed from `agent.py`; the iteration limit still reads `config.MAX_ITERATIONS` inside `trace.check_iterations`. Seven automated tests and the terminal runs verify parsing, state handoffs, early stops, and the iteration limit; these are checks of the build, not the five-trial Unit 4 evaluation.
 
-**Submission repository:** [Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026](https://github.com/Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026). Use this same repository for Unit 4. The local Unit 3 work is complete; push the commits and submit this URL through the course submission page.
+**Moment 3 — Unit 4 evaluation and diagnosis**
+
+- *What I asked for:* I asked Codex to help run all five criteria and diagnose every miss, then asked why the caption criterion failed.
+- *What came back:* Codex added the missing scenarios, recorded the actual arguments received by the tools, and ran five trials per criterion with caching off. The baseline used 40 real model requests, including the empty-wardrobe diagnostic. Four criteria passed 5 of 5; the caption criterion passed 0 of 5 because every response omitted the full listing title. The diagnosis checked that the correct title reached the caption tool and identified the gap between "mention the item" in the prompt and the exact-title criterion.
+- *What I changed:* I kept the original criterion and 4-of-5 target after discussing why a shorter description did not count as the full title. I chose that specific prompt mismatch as the single improvement to test. The run log records the miss rather than treating the correct price and platform as a complete pass.
+
+**Moment 4 — Unit 4 single improvement and rerun**
+
+- *What I asked for:* I agreed that requiring the exact title would be our "fix one thing" and asked Codex to complete Milestone 5.
+- *What came back:* Codex rewrote only the `create_fit_card` prompt to request the full title verbatim exactly once and supply it on an explicit line. The full after-run used the same scenarios, settings, and scoring rules with 40 fresh model requests. Criterion 4 improved from 0 of 5 to 5 of 5, while the other four criteria remained at 5 of 5.
+- *What I changed:* I approved the exact-title instruction as the one behavioral change. The original targets, temperature, and agent loop stayed fixed for the comparison. Codex saved both logs, actual outputs, source hashes, and a before/after table; I will submit the existing repository URL myself through the course page.
+
+**Submission repository:** [Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026](https://github.com/Ziyu-Zhou/ai201-project2-fitfindr-starter-v2026). This is the same repository recorded in the Unit 3 write-up and used for Unit 4. Submit this same URL through the course submission page; the course-page submission is a manual step.
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
 
@@ -497,6 +509,16 @@ behaved differently afterwards. If the rewire didn't work, say exactly where it
 broke — the error text and the last thing that worked. That earns the point in
 full. -->
 
+Registered only `search_listings` in `mcp_server.py` with its typed inputs and
+description, and replaced the direct search in `agent.py::run_agent` with
+`mcp_client.call_tool("search_listings", session["parsed"])`. The client starts
+the server as a separate process and communicates over stdio for each request.
+`python mcp_client.py` successfully discovered the tool and its required
+description, optional size, and optional price ceiling, matching the Tool
+Inventory. Five direct-versus-MCP comparisons returned identical lists of
+complete listing dictionaries, including `[]` for an empty search. The return
+shape, ranking, and filtering stayed the same; the call now crosses the MCP
+boundary. The successful end-to-end run and traces show the agent using it.
 
 
 ---
@@ -670,6 +692,75 @@ claim that every future caption for every listing will comply.
      you did. "I ran out of time" is fine if it's true. Pretending nothing is
      left is not. -->
 
+**No acceptance criterion is still missed in the after-run.** All five passed
+5 of 5 against their original targets. The following limitations remain outside
+what those five trials establish:
+
+**Caption compliance beyond the tested listing.** The exact-title prompt worked
+in the five measured trials for `lst_002`, but `create_fit_card` still returns the
+model response without validating title, price, or platform counts. A future
+response could still omit or repeat a required detail. I would next test more
+listing titles and add an output check with a bounded repair attempt or a clear
+failure message. I stopped after the single prompt improvement so its effect
+could be measured with the original test and recorded separately.
+
+**Model failures in direct agent calls and their traces.** The CLI catches model
+exceptions in `app.py::main` and prints the adapter's actionable error message
+without a traceback. However, `agent.py::run_agent` itself still lets
+`ModelUnavailable` escape, so a direct caller does not receive a normal session
+with `session["error"]`. Because `trace.step()` runs after a tool returns, the
+failed tool is also absent from the normal trace. I would catch that exception
+at the model-tool stage, preserve the partial session, and record the failed
+tool and recovery advice. I left this as a follow-up to keep the measured
+improvement confined to the caption prompt; the real CLI failure check below
+already gives the user a specific next action.
+
+**Three deliberate failure checks**
+
+Empty search was triggered with
+`python app.py ask 'designer ballgown size XXS under $5'`. The recorded session
+and trace show that neither model tool ran:
+
+```text
+No matching listings. Try different keywords, another size, or a higher budget.
+```
+
+Empty wardrobe was exercised by the `empty wardrobe` evaluation scenario,
+which supplies the same `{"items": []}` wardrobe as the CLI's `--empty-wardrobe`
+flag. All five before-run and all five after-run diagnostic trials returned
+nonempty styling advice without a crash. One complete after-run response from
+`tools.py::suggest_outfit` is included below, with all trials preserved in the
+[after-run log](results/run_2026-10-13_232157_after.md).
+
+```text
+Here are two ways to style this versatile light-wash cropped denim jacket, keeping in mind its structured shoulders and vintage streetwear vibe:
+
+### Look 1: Casual Streetwear Contrast
+* **The Outfit:** Pair the light blue cropped jacket with black wide-leg cargo pants and a fitted white ribbed tank top. Finish with chunky retro sneakers.
+* **Colors, Fit & Style:** The light blue wash pops against the dark, moody black of the cargos. The boxy, cropped fit of the jacket balances the voluminous, relaxed fit of the pants, creating a classic streetwear silhouette that highlights the waist.
+
+### Look 2: Monochromatic Vintage Casual
+* **The Outfit:** Layer the denim jacket over an olive green maxi slip dress and add worn-in canvas high-top sneakers.
+* **Colors, Fit & Style:** The cool undertones of the light blue denim complement earthy olive green for an effortless, muted color palette. The structured shoulders and short length of the jacket add a cool, casual edge to the soft, flowing drape of the dress, leaning into a 90s vintage aesthetic.
+```
+
+Model unavailability was triggered using a command-local invalid key and
+caching disabled, exercising a real provider rejection while leaving `.env`
+unchanged. The actual command and output were:
+
+```text
+$ env AI201_CACHE=0 GEMINI_API_KEY=invalid-for-milestone2 .venv/bin/python app.py ask 'graphic tee under $30, size M'
+
+ModelUnavailable: The model rejected your API key. Check GEMINI_API_KEY in your .env file, or create a fresh key at aistudio.google.com.
+
+1 model calls this session
+```
+
+This failed with exit status 1 and an actionable message, without a raw
+traceback. The next ordinary command uses the key from `.env` again; both full
+evaluations subsequently completed with the configured working key. The invalid
+key and cache override applied only to the failure-test command.
+
 
 
 <!-- ═════════════════════════════════════════════════════════════════════
@@ -689,18 +780,20 @@ claim that every future caption for every listing will comply.
 
      SUBMISSION CHECKLIST — unit 4
 
-       [ ] mcp_server.py exists with one tool registered
+       [x] mcp_server.py exists with one tool registered
            (or a written record of exactly where the rewire broke)
-       [ ] Run Log — Before, five criteria, five tries each
-       [ ] Real output pasted underneath, naming file and function
+       [x] Run Log — Before, five criteria, five tries each
+       [x] Real output pasted underneath, naming file and function
        [x] A verdict on every criterion
        [x] A diagnosis for every miss, naming a place AND a mechanism
-       [ ] Loop Trace, with the MCP call visible in it
-       [ ] All three failure modes triggered and handled
+       [x] Loop Trace, with the MCP call visible in it
+       [x] All three failure modes triggered and handled in the CLI
+           (direct-agent exception handling remains documented above)
        [x] One improvement, with Run Log — After in the same format
-       [ ] What's Still Broken
-       [ ] At least four new commits
-       [ ] The SAME repository URL as last unit
+       [x] What's Still Broken
+       [x] At least four new commits
+       [x] The SAME repository URL as last unit
+       [ ] Repository URL submitted through the course page — manual step
 
      Do not delete and recreate this repository. Your commit history is what
      shows your criteria existed before your results did.

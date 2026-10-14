@@ -376,15 +376,66 @@ satisfy both parts of the original budget criterion.
 
 | # | Criterion | Target | Verdict | How I decided |
 |---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| 1 | A matching query completes all three tools | 4 of 5 | MET (5/5) | Every try completed search, outfit, and caption in order, returned a nonempty fit card, and had no session error or exception. |
+| 2 | An impossible query stops before the second tool | 5 of 5 | MET (5/5) | Every try returned an empty search, recorded only the MCP search call, and told the user to change keywords, size, or budget; neither model tool ran. |
+| 3 | The selected item reaches the outfit tool unchanged in identity | 5 of 5 | MET (5/5) | The ID captured at the actual `suggest_outfit` entry was `lst_002` in every try, equal to `session["selected_item"]["id"]`; the tool was reached in all five tries. |
+| 4 | The fit card includes the item, price, and platform once each | 4 of 5 | MISSED (0/5) | Every caption mentioned the correct $18.00 price and depop once, but none contained the full title `Y2K Baby Tee — Butterfly Print`, so each failed one required part. |
+| 5 | Search respects the price ceiling without returning only empty results | 5 of 5 | MET (5/5) | In every trial, all five originally specified descriptions returned at least one listing and every returned price was at most $30.00, giving 25 compliant MCP searches. |
 
 **Diagnoses**
 
+**Criterion 4 — model output at the caption step, `tools.py::create_fit_card`.**
+All five misses follow the same pattern for the same selected listing: the model
+paraphrases the item as a "little baby tee," "butterfly baby tee," or "early
+2000s baby tee" instead of reproducing its complete listing title. The five
+captions are different, and each try made two uncached model requests, so this
+is a repeated omission across fresh outputs.
 
+| Try | Full title occurrences | Correct dollar amount occurrences | Platform occurrences | Result |
+|---|---|---|---|---|
+| 1 | 0 | 1 | 1 | FAIL |
+| 2 | 0 | 1 | 1 | FAIL |
+| 3 | 0 | 1 | 1 | FAIL |
+| 4 | 0 | 1 | 1 | FAIL |
+| 5 | 0 | 1 | 1 | FAIL |
+
+**Mechanism:** The caption prompt says "Mention the item, its price in dollars,
+and its platform exactly once each." It includes the complete title inside the
+selected-item JSON, but does not explicitly require copying that title verbatim.
+Describing a butterfly tee satisfies the broad instruction to mention the item
+while missing the criterion's exact full-title requirement. The tool then returns
+`generate(prompt).strip()` without checking whether the required title appears.
+The likely cause is this gap between the prompt's item-description instruction
+and the criterion's literal-title contract; the observed failure is in the
+model's caption output.
+
+The recorded arguments localize the problem: `create_fit_card` received the
+correct title `Y2K Baby Tee — Butterfly Print` in all five tries, together with
+the outfit saved in the session. `_format_listing` preserves that title when it
+builds the prompt. The loop reached all three stages, and the item identity
+remained `lst_002`. The title was available at the caption step; it was omitted
+from the generated text. These five misses therefore indicate one recurring
+caption problem. The evidence covers this listing and these trials; it does not
+establish how often the omission occurs for other listings.
+
+Evidence: the **fit card includes full title, price, and platform once** scenario
+in the [full baseline log](results/run_2026-10-13_224415_before.md), with the actual
+caption-tool arguments and complete responses in the
+[raw evidence](results/run_2026-10-13_224415_before.json).
+
+**Verdict challenge:** The strongest case for calling criterion 4 MET is that
+the captions describe the right butterfly tee and include the correct price and
+platform, so a reader could understand the find. That argument would fit a
+criterion requiring only a recognizable description. The original criterion
+explicitly requires the full title exactly once, with case-insensitive matching.
+All five have zero matches, so the MISSED verdict holds. Criterion 1 can still
+be MET because it measures completion of the three-tool path; criterion 4
+measures the resulting caption's specific content.
+
+**Criterion revisions:** None. Criterion 4 is measurable and the omission can
+be identified directly in each response. The original wording and targets stay
+in place. The next improvement should address the caption's exact-title
+instruction and then be measured with the same scenarios and scoring rules.
 
 ---
 
@@ -509,8 +560,8 @@ full. -->
            (or a written record of exactly where the rewire broke)
        [ ] Run Log — Before, five criteria, five tries each
        [ ] Real output pasted underneath, naming file and function
-       [ ] A verdict on every criterion
-       [ ] A diagnosis for every miss, naming a place AND a mechanism
+       [x] A verdict on every criterion
+       [x] A diagnosis for every miss, naming a place AND a mechanism
        [ ] Loop Trace, with the MCP call visible in it
        [ ] All three failure modes triggered and handled
        [ ] One improvement, with Run Log — After in the same format

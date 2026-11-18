@@ -1,0 +1,5 @@
+
+  Found:    Y2K Baby Tee — Butterfly Print — $18.0 on depop
+  Stopped:  Outfit generation failed. The model rejected your API key. Check GEMINI_API_KEY in your .env file, or create a fresh key at aistudio.google.com. Try again when the model is available.
+
+0 model calls this session

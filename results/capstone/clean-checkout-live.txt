@@ -1,0 +1,21 @@
+
+  Found:    Y2K Baby Tee — Butterfly Print — $18.0 on depop
+  Outfit:   Here is a Y2K-inspired outfit featuring your thrifted baby tee:
+
+### Outfit: Y2K Streetwear Contrast
+**Selected Thrifted Item:**
+* Y2K Baby Tee — Butterfly Print
+
+**Wardrobe Pieces Used:**
+* Baggy straight-leg jeans, dark wash (`w_001`)
+* Black cropped zip hoodie (`w_005`)
+* Chunky white sneakers (`w_007`)
+* Black crossbody bag (`w_010`)
+
+**Why It Works:**
+* **Fit:** This outfit plays on the classic Y2K proportion of a fitted, cropped top paired with low-or-high-waisted baggy bottoms. The fitted crop length of the baby tee highlights the waist against the high-waisted, relaxed silhouette of the dark wash jeans. Layering the black cropped zip hoodie on top keeps the overall shape balanced and short-waisted.
+* **Colors:** The white, pink, and purple in the butterfly graphic pop against the dark blue denim. The black from the hoodie and crossbody bag grounds the lighter pastel tones of the tee, while the chunky white sneakers tie back to the white base of the shirt.
+* **Style:** It seamlessly blends early 2000s nostalgic graphics with modern streetwear staples, giving the sweet cottagecore-leaning butterfly print an edgy, everyday attitude.
+  Fit card: Channeling major early 2000s energy by styling this little butterfly tee with baggy dark wash denim, chunky sneakers, and an edgy zip-up hoodie for that ultimate high-low contrast. I scored this Y2K Baby Tee — Butterfly Print for just $18.00 on depop, and the pastel pink and purple graphics pop so well against the dark denim. It gives that sweet graphic tee a totally effortless streetwear edge.
+
+2 model calls this session, 1740 prompt + 375 output tokens

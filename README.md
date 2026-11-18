@@ -802,71 +802,597 @@ key and cache override applied only to the failure-test command.
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+
 ## Capstone
 
 **What This Extends**
 
-FitFindr's existing MCP search, outfit suggestion, and fit-card workflow.
-The extension preserves completed work when a model stage fails and records
-the failure for a direct caller as well as the command-line user.
+FitFindr's existing three-stage workflow: MCP listing search, model-generated
+outfit suggestions, and a model-generated fit-card caption. The extension
+returns useful completed work when a model stage fails, including to direct
+callers, and displays that partial result in the CLI.
 
 **The Shape**
 
-Shape B: harden the two model stages against failure. Return the existing
-session with an actionable error and the failed stage, keeping any selected
-listing and completed outfit. Record every agent run in a structured file,
-including rejected input, empty searches, and failures.
+Shape B: harden the model stages against failure. Model unavailability, propagated
+timeouts, quota exhaustion, and blank generated text now produce an actionable
+session error with an error code and failed stage. A failed outfit stops caption
+generation; a failed caption preserves the completed outfit. The existing
+adapter owns rate-limit retries; the agent adds no retry loop.
 
-Out of scope: additional shopping tools or data sources, a new interface,
-changes to ranking or caption requirements, and an additional retry policy.
-The model adapter's existing rate-limit retries remain the adapter's job.
+Out of scope: new shopping tools or data sources, changes to search ranking or
+caption requirements, interface redesign, hosted deployment, and a new retry
+policy. One additional measured improvement addresses blank model responses.
 
 **Running It**
 
-Path B: local execution with logs. Reproducible instructions will be added to
-[RUNNING.md](RUNNING.md). Hosted deployment is outside this capstone's scope.
+Path B, local execution with persistent logs. From the pinned environment:
+
+```bash
+.venv/bin/python app.py ask 'graphic tee under $30, size M'
+```
+
+See [RUNNING.md](RUNNING.md) for clean setup, environment requirements, log
+location, and commands to reproduce both evaluation phases. There are no local
+model weights. The clean-checkout record, including installation, 19 development
+checks, a real missing-key failure, and the live start command, is in
+[clean-checkout.md](results/capstone/clean-checkout.md).
 
 **Instrumentation**
 
-Implementation pending. The capstone log will include timestamp, run ID,
-input, output, elapsed time, status, failed stage, and measured model usage.
-The existing printed trace will also include a failed model tool.
-Real run extracts will be added only after the capstone criteria are committed.
+`agent.py::run_agent` writes exactly one JSONL record through `run_log.py::append`
+for each completed, rejected, no-match, or failed agent run. Records contain UTC
+timestamp, unique run ID, input query/wardrobe, completed output, status,
+error/stage/code, end-to-end milliseconds, stage timings, model-call count, and
+provider-reported prompt/output token deltas. Unexpected programming/transport
+exceptions are logged and re-raised. Printed tracing remains optional; persistent
+logging is always active. End-to-end timing includes MCP startup and provider
+pacing/waits, and excludes interpreter startup, CLI printing, and the log append.
+
+The following ten **actual recorded controlled-suite runs** come from
+`results/capstone/after-controlled/criterion-3-trial-1.jsonl`. They demonstrate
+persistence and both success/failure paths. Successful model text here is an
+explicit controlled fixture, and failures are deliberately injected; these are
+not represented as live model quality or cost evidence. This field projection
+omits the wardrobe, stage details, and usage; their original values remain in
+the raw JSONL file.
+
+```jsonl
+{"timestamp": "2026-11-18T06:07:43.385242+00:00", "run_id": "cd09713f-b923-4d46-9fcf-8a2e044b7b0e", "status": "completed", "duration_ms": 237.491, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": "Controlled fixture outfit: pair the selected tee with black jeans and white sneakers.", "fit_card": "Controlled fixture caption; this is not a live model response.", "error": null, "error_stage": null, "error_code": null}}
+{"timestamp": "2026-11-18T06:07:43.623630+00:00", "run_id": "f51f4e4f-4cf6-4d2d-95f6-d61d8466403b", "status": "completed", "duration_ms": 236.439, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": "Controlled fixture outfit: pair the selected tee with black jeans and white sneakers.", "fit_card": "Controlled fixture caption; this is not a live model response.", "error": null, "error_stage": null, "error_code": null}}
+{"timestamp": "2026-11-18T06:07:43.860752+00:00", "run_id": "a51cad27-07d8-4df1-b751-950077d38bb7", "status": "rejected", "duration_ms": 0.023, "input": {"query": "tee under $-5"}, "output": {"selected_item": null, "outfit_suggestion": null, "fit_card": null, "error": "Budget must be a finite, non-negative amount.", "error_stage": "parse", "error_code": "invalid_query"}}
+{"timestamp": "2026-11-18T06:07:43.861160+00:00", "run_id": "45940cd8-e77a-457b-bf13-ec34abb47ffe", "status": "rejected", "duration_ms": 0.005, "input": {"query": "tee under $-5"}, "output": {"selected_item": null, "outfit_suggestion": null, "fit_card": null, "error": "Budget must be a finite, non-negative amount.", "error_stage": "parse", "error_code": "invalid_query"}}
+{"timestamp": "2026-11-18T06:07:43.861494+00:00", "run_id": "7fe008c9-5416-45fb-9b3b-8ad0ab582b68", "status": "no_matches", "duration_ms": 236.116, "input": {"query": "designer ballgown size XXS under $5"}, "output": {"selected_item": null, "outfit_suggestion": null, "fit_card": null, "error": "No matching listings. Try different keywords, another size, or a higher budget.", "error_stage": "search", "error_code": "no_matches"}}
+{"timestamp": "2026-11-18T06:07:44.098633+00:00", "run_id": "f65f6f58-17f5-4e35-81ee-4a219674f6e1", "status": "no_matches", "duration_ms": 236.366, "input": {"query": "designer ballgown size XXS under $5"}, "output": {"selected_item": null, "outfit_suggestion": null, "fit_card": null, "error": "No matching listings. Try different keywords, another size, or a higher budget.", "error_stage": "search", "error_code": "no_matches"}}
+{"timestamp": "2026-11-18T06:07:44.336130+00:00", "run_id": "b3f384ac-cb91-4994-b7c4-bad3b1401392", "status": "failed", "duration_ms": 240.732, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": null, "fit_card": null, "error": "Outfit generation failed. The model is unavailable. Try again when the model is available.", "error_stage": "outfit", "error_code": "model_unavailable"}}
+{"timestamp": "2026-11-18T06:07:44.578003+00:00", "run_id": "f5c00de6-0270-4f4e-b58c-fd5960d62631", "status": "failed", "duration_ms": 241.741, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": null, "fit_card": null, "error": "Outfit generation failed. The model is unavailable. Try again when the model is available.", "error_stage": "outfit", "error_code": "model_unavailable"}}
+{"timestamp": "2026-11-18T06:07:44.820874+00:00", "run_id": "feeb718d-1ed2-401f-840c-363d92572c45", "status": "failed", "duration_ms": 240.02, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": "Controlled fixture outfit: pair the selected tee with black jeans and white sneakers.", "fit_card": null, "error": "Caption generation failed. The model is unavailable. Try again when the model is available.", "error_stage": "caption", "error_code": "model_unavailable"}}
+{"timestamp": "2026-11-18T06:07:45.062094+00:00", "run_id": "5ca33c63-c79b-44e5-98ab-57402e0f0282", "status": "failed", "duration_ms": 238.394, "input": {"query": "graphic tee under $30, size M"}, "output": {"selected_item": {"id": "lst_002", "title": "Y2K Baby Tee — Butterfly Print", "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.", "category": "tops", "style_tags": ["y2k", "vintage", "graphic tee", "cottagecore"], "size": "S/M", "condition": "excellent", "price": 18.0, "colors": ["white", "pink", "purple"], "brand": null, "platform": "depop"}, "outfit_suggestion": "Controlled fixture outfit: pair the selected tee with black jeans and white sneakers.", "fit_card": null, "error": "Caption generation failed. The model is unavailable. Try again when the model is available.", "error_stage": "caption", "error_code": "model_unavailable"}}
+```
+
+A further real failure, without a replacement model response, was produced by
+running the documented CLI in the clean checkout with no API key. The listing
+was retained and the outfit stage returned an error. This is an actual log
+extract; the full record and printed output are committed alongside it.
+
+```json
+{
+  "timestamp": "2026-11-18T06:09:26.755803+00:00",
+  "run_id": "5ba2f50c-73ee-406e-bbd1-046393ff9109",
+  "input": {
+    "query": "graphic tee under $30, size M",
+    "wardrobe": {
+      "items": [
+        {
+          "id": "w_001",
+          "name": "Baggy straight-leg jeans, dark wash",
+          "category": "bottoms",
+          "colors": [
+            "dark blue",
+            "indigo"
+          ],
+          "style_tags": [
+            "denim",
+            "streetwear",
+            "baggy"
+          ],
+          "notes": "High-waisted, sits above the hip"
+        },
+        {
+          "id": "w_002",
+          "name": "Wide-leg khaki trousers",
+          "category": "bottoms",
+          "colors": [
+            "khaki",
+            "tan"
+          ],
+          "style_tags": [
+            "earth tones",
+            "minimal",
+            "wide-leg"
+          ],
+          "notes": null
+        },
+        {
+          "id": "w_003",
+          "name": "White ribbed tank top",
+          "category": "tops",
+          "colors": [
+            "white"
+          ],
+          "style_tags": [
+            "basics",
+            "minimal",
+            "fitted"
+          ],
+          "notes": "Goes with everything"
+        },
+        {
+          "id": "w_004",
+          "name": "Oversized grey crewneck sweatshirt",
+          "category": "tops",
+          "colors": [
+            "grey",
+            "charcoal"
+          ],
+          "style_tags": [
+            "oversized",
+            "basics",
+            "cozy"
+          ],
+          "notes": "Really oversized — drops below the hip"
+        },
+        {
+          "id": "w_005",
+          "name": "Black cropped zip hoodie",
+          "category": "tops",
+          "colors": [
+            "black"
+          ],
+          "style_tags": [
+            "athletic",
+            "streetwear",
+            "cropped"
+          ],
+          "notes": null
+        },
+        {
+          "id": "w_006",
+          "name": "Vintage black denim jacket",
+          "category": "outerwear",
+          "colors": [
+            "black"
+          ],
+          "style_tags": [
+            "denim",
+            "vintage",
+            "classic"
+          ],
+          "notes": "Slightly cropped"
+        },
+        {
+          "id": "w_007",
+          "name": "Chunky white sneakers",
+          "category": "shoes",
+          "colors": [
+            "white"
+          ],
+          "style_tags": [
+            "sneakers",
+            "chunky",
+            "streetwear"
+          ],
+          "notes": null
+        },
+        {
+          "id": "w_008",
+          "name": "Black combat boots",
+          "category": "shoes",
+          "colors": [
+            "black"
+          ],
+          "style_tags": [
+            "boots",
+            "grunge",
+            "classic"
+          ],
+          "notes": "Lace-up, mid-ankle height"
+        },
+        {
+          "id": "w_009",
+          "name": "Brown leather belt",
+          "category": "accessories",
+          "colors": [
+            "brown"
+          ],
+          "style_tags": [
+            "classic",
+            "earth tones",
+            "accessories"
+          ],
+          "notes": null
+        },
+        {
+          "id": "w_010",
+          "name": "Black crossbody bag",
+          "category": "accessories",
+          "colors": [
+            "black"
+          ],
+          "style_tags": [
+            "minimal",
+            "accessories",
+            "everyday"
+          ],
+          "notes": null
+        }
+      ]
+    }
+  },
+  "output": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": null,
+    "fit_card": null,
+    "error": "Outfit generation failed. The model rejected your API key. Check GEMINI_API_KEY in your .env file, or create a fresh key at aistudio.google.com. Try again when the model is available.",
+    "error_stage": "outfit",
+    "error_code": "model_unavailable"
+  },
+  "status": "failed",
+  "duration_ms": 1446.109
+}
+```
 
 **What It Costs**
 
-Not measured yet. After criteria are committed, measure ten uncached real
-runs and report the average model token usage and elapsed time, plus the
-arithmetic for one run per person for 100 people per day. Controlled failures
-and fixture outputs must be identified separately from live-model measurements.
+Ten uncached live agent requests were executed with the real MCP search and
+configured model; **10/10 completed**. The measured averages were
+**1,752.5 prompt tokens + 370.4 output tokens = 2,122.9
+reported prompt/output tokens per request**, using 20 actual
+model calls across the ten requests. Mean elapsed agent time was **9.165
+seconds**, including any adapter pacing and provider waits.
+
+Method: `generate.token_counts()` and `generate.call_count()` are read before and
+after each request in `agent.py::run_agent`; the evaluator averages those deltas.
+`time.perf_counter()` measures elapsed time. These token counts came from response
+usage metadata, with caching disabled, rather than a pricing page. The sum covers
+reported prompt/output tokens; it is not a claim about dollar billing or any
+unreported token category. Controlled fault/fixture runs are excluded.
+
+For **100 people making one request each per day**:
+`100 × 2,122.9 = 212,290` reported tokens/day
+(`175,250` prompt + `37,040` output).
+The corresponding measured elapsed-time sum is
+`100 × 9.165 = 916.500` seconds/day;
+this is an operational projection, not CPU time or a throughput guarantee.
+Raw outputs, usage, and timings are in [the cost evidence](results/capstone/cost/summary.json).
 
 **Run Log and Verdicts**
 
-Pending five student-authored capstone criteria, with targets and reasons.
-The current criteria.md and results/ document Units 3 and 4, not the capstone.
-Preserve those records when the capstone criteria are supplied. No capstone
-evaluation results or verdicts have been collected.
+Five criteria are in [criteria.md](criteria.md). The student selected five
+AI-provided examples before results; that assistance is disclosed there.
+The older criteria remain in [criteria-unit3-4.md](criteria-unit3-4.md).
+
+Each criterion was tested in **three separate trials** with no intervening
+production-code changes within a phase. Criteria 1–3 and 5 deliberately inject
+provider failures/fixture text through `tools.generate`, while retaining the real
+agent, tool functions, and MCP subprocess. Criterion 4 uses the actual provider
+with caching off. Failure trials each cover unavailability, timeout, quota,
+authentication, and exhausted rate-limit errors. Blank trials test five whitespace
+variants at each stage: 5/5 outfit cases plus 5/5 caption cases, shown as 10/10.
+A verdict is MET only if every trial reaches its original target.
+
+Before the improvement:
+
+| Criterion | Target | Trial 1 | Trial 2 | Trial 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Outfit failure preserves listing | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Caption failure preserves outfit | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Every request is logged | 10/10 | 10/10 | 10/10 | 10/10 | MET |
+| 4. Normal live workflow | 4/5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Blank responses stop safely | 10/10 | 0/10 | 0/10 | 0/10 | MISSED |
+
+The only miss was criterion 5. **Stage:** the model tools in `tools.py`.
+**Mechanism:** blank provider text was replaced with a nonempty apology string.
+The agent interpreted that string as a completed result and continued, including
+calling the caption tool after a blank outfit. All ten blank cases failed in
+each of three trials. This was a known risk from code review and was measured
+before changing it. The other four criteria met their targets; their observed
+outputs support no additional failure diagnosis in this test set.
+
+Actual before-run output excerpts follow. These are projections of the saved
+responses, not invented examples. Complete input, output, trace, tool-entry
+records, run logs, hashes, model, and commit metadata are under
+`results/capstone/before-controlled/` and `before-live/`.
+
+Criterion 1: `agent.py::run_agent` / `_run_session`; `agent.py::_run_tool`.
+
+```json
+{
+  "mode": "controlled",
+  "kind": "outfit_failure",
+  "exception": null,
+  "caption_calls": 0,
+  "session": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": null,
+    "fit_card": null,
+    "error": "Outfit generation failed. The model is unavailable. Try again when the model is available.",
+    "error_stage": "outfit",
+    "error_code": "model_unavailable",
+    "status": "failed"
+  }
+}
+```
+
+Criterion 2: `agent.py::run_agent` / `_run_session`; `agent.py::_run_tool`.
+
+```json
+{
+  "mode": "controlled",
+  "kind": "caption_failure",
+  "exception": null,
+  "caption_calls": 1,
+  "session": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": "Controlled fixture outfit: pair the selected tee with black jeans and white sneakers.",
+    "fit_card": null,
+    "error": "Caption generation failed. The model is unavailable. Try again when the model is available.",
+    "error_stage": "caption",
+    "error_code": "model_unavailable",
+    "status": "failed"
+  }
+}
+```
+
+Criterion 4: `agent.py::run_agent` / `_run_session`; `tools.py::suggest_outfit` and `create_fit_card`.
+
+```json
+{
+  "mode": "live",
+  "kind": "live",
+  "exception": null,
+  "caption_calls": 1,
+  "session": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": "### Outfit: Y2K Streetwear Contrast\n\n**Selected Thrifted Item:**\n* Y2K Baby Tee — Butterfly Print (White/Pink/Purple)\n\n**Wardrobe Pieces Used:**\n* Baggy straight-leg jeans, dark wash (w_001)\n* Vintage black denim jacket (w_006)\n* Chunky white sneakers (w_007)\n* Black crossbody bag (w_010)\n\n**Why It Works:**\n* **Fit:** The outfit plays on the classic Y2K proportion-balancing rule: the fitted, cropped silhouette of the baby tee contrasts sharply with the high-waisted, baggy fit of the dark wash jeans. Layering the slightly cropped vintage denim jacket on top adds a structured outer layer without hiding the waistline.\n* **Colors:** The white base and pink and purple butterfly graphics on the tee are tied together by the neutral dark blue and black foundations of the jeans and jacket. The chunky white sneakers echo the white in the baby tee, creating a cohesive, bookended look.\n* **Style:** This combination leans heavily into authentic early-2000s streetwear. The vintage aesthetic of the graphic baby tee and black denim jacket blends seamlessly with the chunky sneakers and practical crossbody bag for an effortless, throwback vibe.",
+    "fit_card": "Channeling total early-2000s streetwear energy by pairing this fitted little top with my baggiest dark wash jeans and a vintage denim jacket. I scored the Y2K Baby Tee — Butterfly Print on depop for just $18.00, and the pink and purple graphic ties the whole throwback look together so well.",
+    "error": null,
+    "error_stage": null,
+    "error_code": null,
+    "status": "completed"
+  }
+}
+```
+
+Criterion 5: `agent.py::run_agent` / `_run_session`; `tools.py::suggest_outfit` and `create_fit_card`.
+
+```json
+{
+  "mode": "controlled",
+  "kind": "outfit_blank",
+  "exception": null,
+  "caption_calls": 1,
+  "session": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": "No outfit suggestion was generated. Please try again.",
+    "fit_card": "Controlled fixture caption; this is not a live model response.",
+    "error": null,
+    "error_stage": null,
+    "error_code": null,
+    "status": "completed"
+  }
+}
+```
+
+Criterion 3's actual persistent records are illustrated under Instrumentation;
+the baseline version is `results/capstone/before-controlled/criterion-3-trial-1.jsonl`,
+written by `agent.py::run_agent` and `run_log.py::append`. Each trial had 10/10
+matching records, with distinct run IDs and successful second-process reads.
 
 **The Improvement**
 
-Pending the baseline evaluation and diagnosis. Select one further change from
-the observed failures, then repeat the full five-criterion, three-trial suite
-without lowering targets. Keep both result sets.
+One change, committed as `2e140bd`: `tools.py::suggest_outfit` and
+`tools.py::create_fit_card` raise `generate.EmptyModelResponse` for blank
+provider output instead of returning apology text as generated content.
+`agent.py::_run_session` uses the existing recovery path and returns the
+`empty_model_response` code, with the failed stage and completed state.
+A development regression check covers every blank variant at both stages.
+
+The full suite was then repeated with the same criteria, requests, injected
+faults, blank variants, and three-trial procedure:
+
+| Criterion | Target | Trial 1 | Trial 2 | Trial 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Outfit failure preserves listing | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 2. Caption failure preserves outfit | 5/5 | 5/5 | 5/5 | 5/5 | MET |
+| 3. Every request is logged | 10/10 | 10/10 | 10/10 | 10/10 | MET |
+| 4. Normal live workflow | 4/5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Blank responses stop safely | 10/10 | 10/10 | 10/10 | 10/10 | MET |
+
+Criterion 5 improved from **0/10, 0/10, 0/10** to **10/10, 10/10, 10/10**.
+Criteria 1–4 kept their MET verdicts. Criterion 4 completed 15/15 live requests
+in each phase. No tradeoff was observed in these measured cases; this does not
+establish that a larger or different workload would behave identically.
+Both result sets are also collected in [comparison.md](results/capstone/comparison.md).
+
+Actual after-run output for the previously missed blank-outfit case:
+
+```json
+{
+  "mode": "controlled",
+  "kind": "outfit_blank",
+  "exception": null,
+  "caption_calls": 0,
+  "session": {
+    "selected_item": {
+      "id": "lst_002",
+      "title": "Y2K Baby Tee — Butterfly Print",
+      "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+      "category": "tops",
+      "style_tags": [
+        "y2k",
+        "vintage",
+        "graphic tee",
+        "cottagecore"
+      ],
+      "size": "S/M",
+      "condition": "excellent",
+      "price": 18.0,
+      "colors": [
+        "white",
+        "pink",
+        "purple"
+      ],
+      "brand": null,
+      "platform": "depop"
+    },
+    "outfit_suggestion": null,
+    "fit_card": null,
+    "error": "Outfit generation failed. The model returned no outfit suggestion. Try again when the model is available.",
+    "error_stage": "outfit",
+    "error_code": "empty_model_response",
+    "status": "failed"
+  }
+}
+```
 
 **What's Still Broken**
 
-The initial implementation and development verification are in progress.
-The student's capstone criteria, formal before/after evaluation, measured cost,
-and clean-checkout run verification remain outstanding.
+No selected criterion remains MISSED in the after-run. The 4-of-5 threshold in
+criterion 4 was permissive for this sample: both phases completed 5/5 in all
+three trials. I would tighten that target to **5/5 in every trial** in a future
+evaluation, keeping the current target and results unchanged here.
+
+The controlled fault suite checks recovery, not the frequency of real provider
+outages. This work does not add a total request deadline across provider calls,
+pacing, and retries, so a slow provider or quota wait can still delay a user.
+Unexpected programming/MCP transport errors still raise after recording the
+failure; this extension specifically handles model-stage failures. Routine
+JSONL files are local and are not a multi-process logging service.
+
+I stopped after the one measured blank-response change to preserve a clear
+before/after comparison. With another unit, my first change would bound total
+request duration across provider waits and retries, because preserving results
+is useful only if a caller eventually receives them.
 
 **How I Used AI**
 
-The student asked Codex to compare the four existing projects. Codex inspected
-the code and prior evaluation notes and identified the direct-agent failure
-handling gap in FitFindr; the student selected that extension.
+Moment 1: I asked Codex for a capstone suggestion after reviewing the four
+projects. Codex inspected the current agent and prior evaluation notes and
+identified that direct callers lost the normal session response on model
+failure. I selected the FitFindr hardening extension and chose examples
+1, 2, 4, 5, and 6 from the acceptance-criteria examples Codex supplied. The
+criteria are AI-assisted and are not claimed as unaided student authorship.
 
-The student then asked Codex to begin implementation. Codex is implementing
-the scoped failure handling and instrumentation and preparing reproducible
-instructions. The student has been asked to author the capstone criteria;
-this work does not claim AI-authored targets are the student's own judgment.
-
+Moment 2: I asked Codex to begin the work. Codex implemented recovery,
+persistent logging, partial CLI output, the evaluation harness, and development
+checks; executed controlled and live before/after trials; diagnosed the blank
+fallback behavior; and changed the tools to raise an explicit empty-response
+error. Codex also measured usage, verified a clean checkout, and prepared this
+write-up from saved outputs. The implementation and report assistance were
+extensive; this does not claim I personally performed those steps.

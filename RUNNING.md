@@ -82,15 +82,19 @@ Evidence directories are never overwritten. To repeat later, choose a new
 output directory and preserve the original before/after records.
 
 Unexpected programming or MCP transport errors still raise after being logged.
-The agent handles ModelUnavailable, TimeoutError, and QuotaGuard without adding
-another retry loop. The CLI exits normally for a returned session error; direct
+The agent handles ModelUnavailable (including EmptyModelResponse), TimeoutError,
+and QuotaGuard without adding another retry loop. The CLI exits normally for a returned session error; direct
 and HTTP callers must inspect the session's error/status fields. The existing
 HTTP wrapper returns the session with HTTP 200 for handled model failures.
 
 ### Clean-checkout verification
 
-Verification of these setup/start instructions will be recorded in
-`results/capstone/clean-checkout.md` after the final implementation is committed.
+These setup/start instructions were verified in a fresh clone and virtual
+environment, with all pins reinstalled, all 19 development checks passing,
+and the documented request completing against the live provider. A real
+missing-key failure also preserved the selected item. See
+[the clean-checkout record](results/capstone/clean-checkout.md) for exact
+provenance, outputs, and logs.
 
 ## Original Units 3–4 setup reference
 

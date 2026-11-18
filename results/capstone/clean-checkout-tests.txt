@@ -1,0 +1,25 @@
+test_impossible_query_stops_without_model_calls (test_agent.AgentFlowTests.test_impossible_query_stops_without_model_calls) ... ok
+test_invalid_filters_stop_before_search (test_agent.AgentFlowTests.test_invalid_filters_stop_before_search) ... ok
+test_iteration_limit_prevents_the_next_tool_from_running (test_agent.AgentFlowTests.test_iteration_limit_prevents_the_next_tool_from_running) ... ok
+test_matching_query_runs_tools_in_order_and_preserves_state (test_agent.AgentFlowTests.test_matching_query_runs_tools_in_order_and_preserves_state) ... ok
+test_real_tools_complete_with_an_empty_wardrobe_and_mocked_model (test_agent.AgentFlowTests.test_real_tools_complete_with_an_empty_wardrobe_and_mocked_model) ... ok
+test_extracts_filters_without_leaving_them_in_search_text (test_agent.QueryParsingTests.test_extracts_filters_without_leaving_them_in_search_text) ... ok
+test_rejects_invalid_or_ambiguous_filters (test_agent.QueryParsingTests.test_rejects_invalid_or_ambiguous_filters) ... ok
+test_blank_provider_response_stops_at_either_stage (test_capstone.FailureHandlingTests.test_blank_provider_response_stops_at_either_stage) ... ok
+test_caption_failures_preserve_exact_outfit_and_record_failed_step (test_capstone.FailureHandlingTests.test_caption_failures_preserve_exact_outfit_and_record_failed_step) ... ok
+test_cli_shows_completed_work_and_failure_without_none_placeholders (test_capstone.FailureHandlingTests.test_cli_shows_completed_work_and_failure_without_none_placeholders) ... ok
+test_exhausted_provider_rate_limit_uses_the_expected_failure_type (test_capstone.FailureHandlingTests.test_exhausted_provider_rate_limit_uses_the_expected_failure_type) ...   [rate limit] service pushed back. Waiting 1s (attempt 1 of 1). This is the limiter doing its job, not a bug.
+ok
+test_http_call_returns_partial_session_instead_of_500 (test_capstone.FailureHandlingTests.test_http_call_returns_partial_session_instead_of_500) ... ok
+test_log_matches_returned_state_and_survives_another_process (test_capstone.FailureHandlingTests.test_log_matches_returned_state_and_survives_another_process) ... ok
+test_outfit_failures_preserve_item_and_skip_caption (test_capstone.FailureHandlingTests.test_outfit_failures_preserve_item_and_skip_caption) ... ok
+test_unexpected_programming_error_is_logged_and_still_raises (test_capstone.FailureHandlingTests.test_unexpected_programming_error_is_logged_and_still_raises) ... ok
+test_usage_is_a_per_run_delta_not_the_session_total (test_capstone.FailureHandlingTests.test_usage_is_a_per_run_delta_not_the_session_total) ... ok
+test_budget_batch_calls_mcp_for_each_description_without_model_tools (test_eval.EvaluationEvidenceTests.test_budget_batch_calls_mcp_for_each_description_without_model_tools) ... ok
+test_model_failure_keeps_partial_session_and_received_argument (test_eval.EvaluationEvidenceTests.test_model_failure_keeps_partial_session_and_received_argument) ... ok
+test_records_actual_tool_arguments_and_trace_without_changing_results (test_eval.EvaluationEvidenceTests.test_records_actual_tool_arguments_and_trace_without_changing_results) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.091s
+
+OK

@@ -340,7 +340,7 @@ def generate(
             )
             time.sleep(backoff)
 
-    raise RuntimeError(
+    raise ModelUnavailable(
         f"Still rate limited after {config.MAX_RETRIES} attempts. Wait a "
         f"minute and try again — your key is fine.\nLast error: {last_error}"
     )

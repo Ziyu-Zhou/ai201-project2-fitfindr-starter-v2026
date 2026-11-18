@@ -15,10 +15,11 @@ Build and test your three tools in `tools.py` first. Then come here.
 
 import math
 import re
+import time
 
 import trace
 from tools import suggest_outfit, create_fit_card
-from generate import ModelUnavailable
+from generate import ModelUnavailable, QuotaGuard
 import mcp_client
 
 # Match complete filter values so malformed inputs cannot become partial filters.
@@ -110,103 +111,100 @@ def new_session(query: str, wardrobe: dict) -> dict:
         "outfit_suggestion": None,   # what suggest_outfit returned
         "fit_card": None,            # what create_fit_card returned
         "error": None,               # set when the run ended early
+        "error_stage": None,
+        "error_code": None,
+        "status": "running",
+        "steps": [],
     }
 
 
 # ── planning loop ─────────────────────────────────────────────────────────────
 
+def _run_tool(session, stage, name, tool, args, inputs, trace_enabled):
+    """Record a tool attempt, including one that raises before returning."""
+    started = time.perf_counter()
+    event = {"stage": stage, "tool": name, "status": "completed"}
+    try:
+        result = tool(*args)
+    except Exception as exc:
+        event.update(status="failed", error_type=type(exc).__name__)
+        if trace_enabled:
+            trace.step(name, inputs=inputs, returned={"error": str(exc)},
+                       note=f"{stage} failed; stopping with completed work preserved")
+        raise
+    else:
+        if trace_enabled:
+            note = ""
+            if stage == "search":
+                note = ("branch: use the first ranked listing for the outfit" if result
+                        else "branch: empty search, stopping before outfit and caption")
+            trace.step(name, inputs=inputs, returned=result, note=note)
+        return result
+    finally:
+        event["duration_ms"] = round((time.perf_counter() - started) * 1000, 3)
+        session["steps"].append(event)
+
+
 def run_agent(query: str, wardrobe: dict, *, trace_enabled: bool = False) -> dict:
-    """
-    Run the loop once and return the finished session.
+    """Run the existing workflow, returning completed work on model failure.
 
-    Args:
-        query:    what the user asked for, in plain language
-                  (e.g. "vintage graphic tee under $30, size M").
-        wardrobe: a wardrobe dict — get_example_wardrobe() or
-                  get_empty_wardrobe() from utils/data_loader.py.
-        trace_enabled: print each tool's inputs and result when True.
-
-    Returns:
-        The session dict. **Check session["error"] first** — if it isn't None,
-        the run ended early and the later fields will still be None.
-
-    Regex parsing rejects invalid filters before any tool runs. Each loop
-    iteration performs one stage: search, outfit, or caption. Tool results
-    are saved to the session and read from it by the next stage.
-
-    An empty search sets an actionable error and stops before either model
-    tool runs. The iteration guard raises if the configured limit is exceeded.
-
-    Tracing records each completed tool call, including the MCP search and
-    the empty-search branch. Unit 4 also adds a handler for ModelUnavailable.
+    Expected provider failures are represented by error/error_code/error_stage.
+    Unexpected programming errors still raise, rather than becoming false
+    successes. The model adapter owns retries; the agent never retries a tool.
     """
     trace.start_trace()
     session = new_session(query, wardrobe)
+    return _run_session(session, trace_enabled)
 
+
+def _run_session(session, trace_enabled):
     try:
         session["parsed"] = _parse_query(session["query"])
     except ValueError as error:
-        # Invalid constraints should never silently become an unfiltered search.
-        session["error"] = str(error)
+        session.update(error=str(error), error_stage="parse",
+                       error_code="invalid_query", status="rejected")
         return session
 
-    for count, stage in enumerate(("search", "outfit", "caption"), start=1):
-        # Check before executing so no tool runs beyond the configured limit.
-        trace.check_iterations(count)
-
-        if stage == "search":
-            session["search_results"] = mcp_client.call_tool(
-                "search_listings", session["parsed"]
-            )
-            # Log the actual result before branching, including an empty list.
-            if trace_enabled:
-                trace.step(
-                    "search_listings (via MCP)",
-                    inputs=session["parsed"],
-                    returned=session["search_results"],
-                    note=(
-                        "branch: empty search, stopping before outfit and caption"
-                        if not session["search_results"]
-                        else "branch: use the first ranked listing for the outfit"
-                    ),
+    stage = "search"
+    try:
+        for count, stage in enumerate(("search", "outfit", "caption"), start=1):
+            trace.check_iterations(count)
+            if stage == "search":
+                session["search_results"] = _run_tool(
+                    session, stage, "search_listings (via MCP)", mcp_client.call_tool,
+                    ("search_listings", session["parsed"]), session["parsed"], trace_enabled,
                 )
-            if not session["search_results"]:
-                # No selected item exists, so both model stages must be skipped.
-                session["error"] = (
-                    "No matching listings. Try different keywords, another size, "
-                    "or a higher budget."
+                if not session["search_results"]:
+                    session.update(
+                        error="No matching listings. Try different keywords, another size, or a higher budget.",
+                        error_stage="search", error_code="no_matches", status="no_matches",
+                    )
+                    return session
+                session["selected_item"] = session["search_results"][0]
+            elif stage == "outfit":
+                session["outfit_suggestion"] = _run_tool(
+                    session, stage, "suggest_outfit", suggest_outfit,
+                    (session["selected_item"], session["wardrobe"]),
+                    {"new_item": session["selected_item"], "wardrobe": session["wardrobe"]},
+                    trace_enabled,
                 )
-                return session
-            session["selected_item"] = session["search_results"][0]
-
-        elif stage == "outfit":
-            session["outfit_suggestion"] = suggest_outfit(
-                session["selected_item"], session["wardrobe"]
-            )
-            if trace_enabled:
-                trace.step(
-                    "suggest_outfit",
-                    inputs={
-                        "new_item": session["selected_item"],
-                        "wardrobe": session["wardrobe"],
-                    },
-                    returned=session["outfit_suggestion"],
+            else:
+                session["fit_card"] = _run_tool(
+                    session, stage, "create_fit_card", create_fit_card,
+                    (session["outfit_suggestion"], session["selected_item"]),
+                    {"outfit": session["outfit_suggestion"], "new_item": session["selected_item"]},
+                    trace_enabled,
                 )
+    except (ModelUnavailable, TimeoutError, QuotaGuard) as error:
+        code = ("model_timeout" if isinstance(error, TimeoutError) else
+                "quota_exceeded" if isinstance(error, QuotaGuard) else "model_unavailable")
+        session.update(
+            error=f"{stage.capitalize()} generation failed. {error} Try again when the model is available.",
+            error_stage=stage, error_code=code, status="failed",
+        )
+        return session
 
-        else:
-            session["fit_card"] = create_fit_card(
-                session["outfit_suggestion"], session["selected_item"]
-            )
-            if trace_enabled:
-                trace.step(
-                    "create_fit_card",
-                    inputs={
-                        "new_item": session["selected_item"],
-                        "outfit": session["outfit_suggestion"],
-                    },
-                    returned=session["fit_card"],
-                )
-
+    session["status"] = "completed"
     return session
 
 

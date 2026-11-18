@@ -802,3 +802,71 @@ key and cache override applied only to the failure-test command.
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+## Capstone
+
+**What This Extends**
+
+FitFindr's existing MCP search, outfit suggestion, and fit-card workflow.
+The extension preserves completed work when a model stage fails and records
+the failure for a direct caller as well as the command-line user.
+
+**The Shape**
+
+Shape B: harden the two model stages against failure. Return the existing
+session with an actionable error and the failed stage, keeping any selected
+listing and completed outfit. Record every agent run in a structured file,
+including rejected input, empty searches, and failures.
+
+Out of scope: additional shopping tools or data sources, a new interface,
+changes to ranking or caption requirements, and an additional retry policy.
+The model adapter's existing rate-limit retries remain the adapter's job.
+
+**Running It**
+
+Path B: local execution with logs. Reproducible instructions will be added to
+[RUNNING.md](RUNNING.md). Hosted deployment is outside this capstone's scope.
+
+**Instrumentation**
+
+Implementation pending. The capstone log will include timestamp, run ID,
+input, output, elapsed time, status, failed stage, and measured model usage.
+The existing printed trace will also include a failed model tool.
+Real run extracts will be added only after the capstone criteria are committed.
+
+**What It Costs**
+
+Not measured yet. After criteria are committed, measure ten uncached real
+runs and report the average model token usage and elapsed time, plus the
+arithmetic for one run per person for 100 people per day. Controlled failures
+and fixture outputs must be identified separately from live-model measurements.
+
+**Run Log and Verdicts**
+
+Pending five student-authored capstone criteria, with targets and reasons.
+The current criteria.md and results/ document Units 3 and 4, not the capstone.
+Preserve those records when the capstone criteria are supplied. No capstone
+evaluation results or verdicts have been collected.
+
+**The Improvement**
+
+Pending the baseline evaluation and diagnosis. Select one further change from
+the observed failures, then repeat the full five-criterion, three-trial suite
+without lowering targets. Keep both result sets.
+
+**What's Still Broken**
+
+The initial implementation and development verification are in progress.
+The student's capstone criteria, formal before/after evaluation, measured cost,
+and clean-checkout run verification remain outstanding.
+
+**How I Used AI**
+
+The student asked Codex to compare the four existing projects. Codex inspected
+the code and prior evaluation notes and identified the direct-agent failure
+handling gap in FitFindr; the student selected that extension.
+
+The student then asked Codex to begin implementation. Codex is implementing
+the scoped failure handling and instrumentation and preparing reproducible
+instructions. The student has been asked to author the capstone criteria;
+this work does not claim AI-authored targets are the student's own judgment.
+

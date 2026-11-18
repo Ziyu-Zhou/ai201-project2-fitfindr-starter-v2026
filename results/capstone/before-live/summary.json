@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "phase": "before",
+    "mode": "live",
+    "started": "2026-11-18T06:04:40.397556+00:00",
+    "git_commit": "98b6cae7f9f349140dc807210f76e4eecb5b5d1d",
+    "python": "3.13.11 (main, Dec  5 2025, 16:06:33) [Clang 17.0.0 (clang-1700.4.4.1)]",
+    "model": "gemini-3.5-flash-lite",
+    "cache_enabled": false,
+    "source_sha256": {
+      "criteria.md": "34aac001c75c7edc5713cf7b72a871d75a6c4859a3db935cdb4e0b6ef6125934",
+      "agent.py": "e4dea1b2eaf5f17bdfda20f94538545abd1f294a4bca931ddf600d9c83b912a9",
+      "tools.py": "a6f842a5cd1df3cc3c33626e6d44df9713d51beef8e0c526def1a394e6e2915d",
+      "generate.py": "86c59dfc6d18358857c372066ac95119db49dcc4e6f5fe3963ec2935e9cfbd7f",
+      "run_log.py": "66f2e9129605fdf2a006e65938ed79ab62f79bc727697df86b25ef18cc52cc3f",
+      "capstone_eval.py": "7e53efd03da74ce10666ba341771ba97742a250d349b0c4ff2bc4c7349b94d20",
+      "requirements-capstone.txt": "bd075b3415eceff93796e59778ddbf84edbf3d517111ec345f761161cdf23abb"
+    },
+    "evidence_note": "Controlled provider fixtures/faults are labeled; all searches use real MCP."
+  },
+  "rows": [
+    {
+      "criterion": 4,
+      "target": "4/5",
+      "trials": [
+        "5/5",
+        "5/5",
+        "5/5"
+      ],
+      "verdict": "MET"
+    }
+  ]
+}

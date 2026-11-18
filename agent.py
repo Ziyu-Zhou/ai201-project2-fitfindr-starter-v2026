@@ -20,6 +20,7 @@ import uuid
 from datetime import datetime, timezone
 
 import trace
+import config
 import generate
 import run_log
 from tools import suggest_outfit, create_fit_card
@@ -251,15 +252,16 @@ def _run_session(session, trace_enabled):
 # ── running it directly ───────────────────────────────────────────────────────
 
 def _show(session: dict) -> None:
+    """Show completed work even when a later stage failed."""
+    item = session["selected_item"]
+    if item is not None:
+        print(f"  Found:    {item.get('title')} — ${item.get('price')} on {item.get('platform')}")
+    if session["outfit_suggestion"] is not None:
+        print(f"  Outfit:   {session['outfit_suggestion']}")
+    if session["fit_card"] is not None:
+        print(f"  Fit card: {session['fit_card']}")
     if session["error"]:
-        print(f"  stopped: {session['error']}")
-        print(f"  fit_card is {session['fit_card']!r} — it should still be None here")
-        return
-
-    item = session["selected_item"] or {}
-    print(f"  found:    {item.get('title')} — ${item.get('price')} on {item.get('platform')}")
-    print(f"  outfit:   {session['outfit_suggestion']}")
-    print(f"  fit card: {session['fit_card']}")
+        print(f"  Stopped:  {session['error']}")
 
 
 if __name__ == "__main__":

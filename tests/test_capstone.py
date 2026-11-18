@@ -122,6 +122,27 @@ class FailureHandlingTests(unittest.TestCase):
         self.assertEqual(session["usage"]["tokens"], {"prompt": 50, "output": 20, "total": 70})
         self.assertEqual(self.records()[0]["usage"], session["usage"])
 
+    def test_blank_provider_response_stops_at_either_stage(self):
+        blanks = ("", " ", "\n", "\t", " \n ")
+        for stage in ("outfit", "caption"):
+            for blank in blanks:
+                with self.subTest(stage=stage, blank=repr(blank)), \
+                        patch("tools.generate", side_effect=(
+                            [blank, "Should never be requested."] if stage == "outfit"
+                            else ["Keep this exact outfit.", blank])) as provider:
+                    session = agent.run_agent("graphic tee", self.wardrobe)
+                self.assertEqual(session["selected_item"], self.item)
+                self.assertEqual(session["status"], "failed")
+                self.assertEqual(session["error_stage"], stage)
+                self.assertEqual(session["error_code"], "empty_model_response")
+                self.assertIsNone(session["fit_card"])
+                if stage == "outfit":
+                    self.assertIsNone(session["outfit_suggestion"])
+                    self.assertEqual(provider.call_count, 1)
+                else:
+                    self.assertEqual(session["outfit_suggestion"], "Keep this exact outfit.")
+                    self.assertEqual(provider.call_count, 2)
+
     def test_exhausted_provider_rate_limit_uses_the_expected_failure_type(self):
         class UnavailableClient:
             @property

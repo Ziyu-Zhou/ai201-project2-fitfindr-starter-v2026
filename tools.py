@@ -24,7 +24,7 @@ import json
 import re
 
 import config
-from generate import generate
+from generate import generate, EmptyModelResponse
 from utils.data_loader import load_listings
 
 
@@ -225,8 +225,9 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
 
     # The shared adapter handles pacing, caching, and model errors.
     response = generate(prompt).strip()
-    # A blank model response still needs a useful, non-empty result for the caller.
-    return response or "No outfit suggestion was generated. Please try again."
+    if not response:
+        raise EmptyModelResponse("The model returned no outfit suggestion.")
+    return response
 
 
 # ── Tool 3: create_fit_card ───────────────────────────────────────────────────
@@ -291,5 +292,6 @@ def create_fit_card(outfit: str, new_item: dict) -> str:
         f"Outfit suggestion:\n{outfit_description}"
     )
     response = generate(prompt).strip()
-    # Preserve the non-empty return contract even if the model supplies no text.
-    return response or "No fit card was generated. Please try again."
+    if not response:
+        raise EmptyModelResponse("The model returned no fit card.")
+    return response

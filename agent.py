@@ -24,7 +24,7 @@ import config
 import generate
 import run_log
 from tools import suggest_outfit, create_fit_card
-from generate import ModelUnavailable, QuotaGuard
+from generate import ModelUnavailable, EmptyModelResponse, QuotaGuard
 import mcp_client
 
 # Match complete filter values so malformed inputs cannot become partial filters.
@@ -237,7 +237,8 @@ def _run_session(session, trace_enabled):
                     trace_enabled,
                 )
     except (ModelUnavailable, TimeoutError, QuotaGuard) as error:
-        code = ("model_timeout" if isinstance(error, TimeoutError) else
+        code = ("empty_model_response" if isinstance(error, EmptyModelResponse) else
+                "model_timeout" if isinstance(error, TimeoutError) else
                 "quota_exceeded" if isinstance(error, QuotaGuard) else "model_unavailable")
         session.update(
             error=f"{stage.capitalize()} generation failed. {error} Try again when the model is available.",

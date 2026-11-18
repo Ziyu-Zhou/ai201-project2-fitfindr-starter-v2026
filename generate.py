@@ -60,6 +60,10 @@ class ModelUnavailable(Exception):
     """
 
 
+class EmptyModelResponse(ModelUnavailable):
+    """A provider returned blank text instead of usable generated content."""
+
+
 # ─── Cache ───────────────────────────────────────────────────────────────────
 
 

@@ -1,5 +1,99 @@
 # Running FitFindr
 
+## Capstone: local execution with structured logs (Path B)
+
+The capstone extends this repository's existing workflow with model failure
+handling. Use a terminal; an editor, notebook, or running web server is not
+required. The CLI and optional HTTP wrapper use the same agent.
+
+### Environment and setup
+
+- Tested environment: CPython 3.13.11 on macOS. Python 3.11–3.13 is supported
+  by the original project; the exact pinned capstone environment is 3.13.
+- Install the exact dependencies in `requirements-capstone.txt`. This records
+  the versions used for the capstone; `requirements.txt` retains the original
+  course bounds.
+- A Gemini API key is required for live outfit and caption generation. Copy
+  `.env.example` to `.env` and set `GEMINI_API_KEY` privately. Keep `.env` ignored.
+  The configured model is selected by `AI201_MODEL`; the default is in config.py.
+- Listings and wardrobe fixtures are committed in `data/`. There are no local
+  model weights to download: model inference happens at the provider.
+
+From a clean checkout of this same repository:
+
+```bash
+python3.13 -m venv .venv
+.venv/bin/python -m pip install -r requirements-capstone.txt
+cp .env.example .env
+# Set your API key in .env before requesting live generation.
+```
+
+Start and execute one request with this single command:
+
+```bash
+.venv/bin/python app.py ask 'graphic tee under $30, size M'
+```
+
+The command searches through the real MCP subprocess, generates an outfit and
+caption, prints completed work, and exits. A model failure prints the completed
+listing/outfit and a recovery message. Add `--trace` to see every attempted tool,
+including the tool that failed. The interactive form is `.venv/bin/python app.py ask`.
+
+Every agent invocation appends a JSON object to `logs/agent.jsonl`, even when
+input is rejected, no listings match, or the model fails. `FITFINDR_RUN_LOG`
+can select another path. Routine logs are ignored; selected capstone evidence
+is committed under `results/capstone/` and pasted into the README as text.
+Make sure the log directory is writable: a log write failure is surfaced rather
+than silently losing the run record.
+
+The log records timestamp, run ID, query and wardrobe input, completed output,
+status, error code/stage, per-stage and end-to-end milliseconds, model call
+count, and token-count deltas reported by the provider. End-to-end timing starts
+inside run_agent and includes MCP startup, provider latency, and rate-limit
+waits; it excludes interpreter startup, CLI printing, and the final log append.
+Controlled provider fixtures consume no model tokens. Zero reported tokens
+cannot establish a dollar cost if the provider did not return usage metadata.
+
+### Development checks and capstone evaluation
+
+```bash
+FITFINDR_RUN_LOG=/tmp/fitfindr-development.jsonl .venv/bin/python -m unittest discover -s tests -v
+```
+
+These development checks use controlled model responses and do not contact the
+provider. The capstone evaluator separately runs the five criteria selected in
+criteria.md in three trials, with caching disabled:
+
+```bash
+.venv/bin/python capstone_eval.py --phase before --mode controlled --output results/capstone/before-controlled
+.venv/bin/python capstone_eval.py --phase before --mode live --output results/capstone/before-live
+# After one diagnosed improvement, repeat both modes with --phase after and new output directories.
+.venv/bin/python capstone_eval.py --phase after --mode controlled --output results/capstone/after-controlled
+.venv/bin/python capstone_eval.py --phase after --mode live --output results/capstone/after-live
+.venv/bin/python capstone_eval.py --phase cost --mode cost --output results/capstone/cost
+```
+
+The controlled suite injects failures/blank responses at tools.generate while
+using the real tools and MCP search. Its fixture successes are explicitly
+labeled. The live suite makes 15 actual agent requests per phase; the cost
+measurement makes 10 more. Each successful live request uses two model calls.
+Existing provider pacing/retries may make these commands take several minutes.
+Evidence directories are never overwritten. To repeat later, choose a new
+output directory and preserve the original before/after records.
+
+Unexpected programming or MCP transport errors still raise after being logged.
+The agent handles ModelUnavailable, TimeoutError, and QuotaGuard without adding
+another retry loop. The CLI exits normally for a returned session error; direct
+and HTTP callers must inspect the session's error/status fields. The existing
+HTTP wrapper returns the session with HTTP 200 for handled model failures.
+
+### Clean-checkout verification
+
+Verification of these setup/start instructions will be recorded in
+`results/capstone/clean-checkout.md` after the final implementation is committed.
+
+## Original Units 3–4 setup reference
+
 Everything about how the starter works and how to use it.
 
 ---

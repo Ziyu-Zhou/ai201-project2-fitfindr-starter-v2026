@@ -1,129 +1,79 @@
-# Acceptance criteria — FitFindr
+# FitFindr capstone acceptance criteria
 
-Five criteria that say what "working" means for this agent, written in unit 3
-**before** any results existed.
+Chosen before capstone evaluation results were collected. The student selected
+examples 1, 2, 4, 5, and 6 supplied by Codex. The wording below makes their trial
+procedure explicit; the numerical targets and reasons are the selected examples.
+These are AI-assisted criteria, not a claim of unaided student authorship.
+The original Units 3–4 criteria are preserved in criteria-unit3-4.md.
 
-An acceptance criterion names a target: a number, a count, a rate, or something
-a person could plainly observe. *"The agent handles errors"* is an opinion.
-*"When search returns nothing, the agent stops before calling the second tool,
-in 5 of 5 tries"* is a criterion.
+Run each criterion in three separate trials, with no code or target changes
+between trials. A criterion is MET only when every trial reaches its target.
+Use the same scenarios before and after the improvement. Deliberate provider
+failures and fixture successes must be labeled as controlled, not live outputs.
 
-Under each one, write a sentence or two on **why that target** and not a
-stricter one. A reason that says something about your tools, your loop, or the
-data earns credit; *"80% seemed reasonable"* does not.
+## 1. An outfit failure preserves the selected listing
 
-> Missing your own targets next unit costs you nothing. Setting a target so
-> easy you can't miss it does.
+For each trial, trigger five model failures during outfit generation. In all
+5 of 5 attempts, run_agent returns a session rather than raising, preserves
+the selected listing returned by search, supplies a nonempty error naming the
+outfit stage, leaves outfit_suggestion and fit_card as None, and never calls
+the caption tool. Exercise unavailability, timeout, and quota-exhaustion errors.
 
-**Two are written for you. You write three.**
+Why this target: finding the item succeeded, so a later failure should preserve
+it. Returning state and skipping the next stage are deterministic decisions;
+allowing even one failure would permit loss of completed work.
 
----
+## 2. A caption failure preserves the completed outfit
 
-## 1. A matching query completes all three tools
+For each trial, trigger five model failures during caption generation after a
+controlled successful outfit response. In all 5 of 5 attempts, run_agent
+returns a session rather than raising, preserves the selected listing and the
+exact completed outfit, sets fit_card to None, and supplies a nonempty error
+naming the caption stage. Exercise the same failure types as criterion 1.
 
-Given a query that matches at least one listing, the agent completes all three
-tool calls and returns a fit card — in at least 4 of 5 tries.
+Why this target: the selected item and outfit remain useful to the user. Their
+preservation is controlled by Python state handling, so 5 of 5 is appropriate.
 
-**Why this target:**
-The successful path depends on two model calls as well as the local search.
-At least 4 of 5 tries requires reliable completion while allowing one failure
-from an unavailable model or an unusable model response; 5 of 5 would assume
-the external service always succeeds.
+## 3. Every request is recorded in the structured log
 
----
+For each trial, execute ten agent requests: two controlled successes, two
+invalid-budget requests, two no-match searches, two outfit failures, and two
+caption failures. Read the persistent JSONL log, not the printed trace. All
+10 of 10 requests must each have exactly one distinct run record containing a
+parseable timestamp, run ID, input, output, status, and a nonnegative numeric
+duration_ms. Logged input/output must match the actual request/session; status
+must distinguish success from rejected input, no matches, and failure. Failed
+model requests must identify the failed stage. The log must remain readable
+from a second process after the requests finish.
 
-## 2. An impossible query stops before the second tool
+Why this target: missing failures would make diagnosis unreliable. Every request
+must be accounted for, including requests that never reach a model.
 
-Given a query that matches no listings, the agent stops before calling
-`suggest_outfit` and returns a message naming what to change — 5 of 5 tries.
+## 4. The normal workflow still completes
 
-**Why this target:**
-This path uses local search and a Python branch, with no model call needed.
-An empty list should always trigger the same stop condition, so even one call
-to the next tool on this path would indicate a bug and 5 of 5 is appropriate.
+For each trial, run the matching query `graphic tee under $30, size M` five
+times with the example wardrobe and caching disabled. Use the real MCP search
+and live model, with no replacement responses. At least 4 of 5 requests must
+complete search, outfit, and caption generation, returning a selected listing,
+nonempty outfit and caption, and no session error or uncaught exception.
+Save the actual responses and model usage. A failed provider request counts as
+a failure; a controlled fixture cannot substitute for a live attempt.
 
----
+Why this target: this allows one external-service failure while checking that
+the extension preserves normal behavior.
 
-## 3. The selected item reaches the outfit tool unchanged in identity
+## 5. Empty model responses stop the workflow without losing completed work
 
-Given a query that matches at least one listing, the `new_item["id"]` actually
-received by `suggest_outfit` equals `session["selected_item"]["id"]` — in
-5 of 5 tries. Record the received argument at the tool entry or intercept it
-in a test; inspecting only the final session is not enough. A try that never
-reaches `suggest_outfit` fails this criterion.
+For each trial, return each of five deliberately blank provider responses
+(`""`, a space, a newline, a tab, and a space/newline combination) at each model
+stage through tools.generate. Use the real tool functions and real MCP search.
+For outfit generation, all 5 of 5 attempts must return an error, keep the
+selected listing, leave the outfit and caption as None, and skip the caption
+model call. For caption generation, all 5 of 5 attempts must return an error,
+keep the selected listing and exact completed controlled outfit, and leave the
+caption as None. An apology string presented as a completed outfit or caption
+fails. No attempt may raise to the caller.
 
-**Why this target:**
-
-Passing the selected item from the session into a function is controlled by
-Python code, not by the model. There is no acceptable variation in which item
-gets passed, so anything below 5 of 5 would permit a state-handling bug.
-
----
-
-## 4. The fit card includes the item, price, and platform once each
-
-For the same selected listing, the generated fit card mentions its full
-`title`, correct dollar price, and `platform` exactly once each — in at least
-4 of 5 tries, with caching disabled. Match the title and platform
-case-insensitively. Count the price as a dollar amount equal to the listing's
-price (`$24` and `$24.00` both count for `24.0`); a conflicting dollar amount
-fails the try. A missing or empty fit card also fails.
-
-**Why this target:**
-
-These details let a reader identify the find and know its cost and source.
-The model writes the caption at temperature 0.9, so it may omit or repeat a
-detail even when the prompt requests it; 4 of 5 requires consistent compliance
-without assuming every generated caption follows the instructions perfectly.
-
----
-
-## 5. Search respects the price ceiling without returning only empty results
-
-Run `search_listings` once for each description `graphic tee`, `flannel`,
-`tank`, `belt`, and `vintage`, with `max_price=30.0` and `size=None`.
-Each search returns at least one listing, and every returned listing has
-`price <= 30.0` — in 5 of 5 searches. An empty result fails, because each of
-these descriptions has a matching listing within the budget in the starter
-dataset.
-
-**Why this target:**
-
-The price filter is a deterministic numeric comparison on local data, so it
-should never return an item over budget. Requiring a non-empty result also
-prevents an unfinished search that always returns `[]` from passing; there
-is no reason to allow a failure among these five known-match searches.
-
----
-
-<!-- ─────────────────────────────────────────────────────────────────────────
-     UNIT 4 — read this before you change anything above.
-
-     If a criterion turns out to be BROKEN rather than merely unmet, you can
-     revise it, and that earns credit. But never delete or edit the original
-     line. Add the revision underneath it, like this:
-
-         ## 4. Something about the fit card
-
-         The fit card is different every time.
-
-         **Why this target:** ...
-
-         > **Revised in unit 4:** For 5 different items, the 5 fit cards share
-         > no opening sentence.
-         >
-         > **Why revised:** "different" wasn't checkable — two cards that
-         > differed by one word still counted. The new version is something I
-         > can actually score.
-
-     That's a revision because the criterion couldn't be MEASURED.
-
-     Lowering a target because you missed it is not a revision, and it costs
-     you the point:
-
-         ✗ "I said the empty search stops it 5 of 5 times, but I got 3 of 5,
-            so 3 of 5 is more realistic."
-
-     A number you missed stays where it is, gets diagnosed, and gets a fix
-     attempted. That's where the points are.
-     ───────────────────────────────────────────────────────────────────────── -->
+Why this target: an empty response should not appear to be successful
+generation. Detecting blank text and preserving earlier state are deterministic,
+so every blank-response case must be handled.

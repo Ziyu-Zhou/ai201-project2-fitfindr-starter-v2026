@@ -42,7 +42,9 @@ class EvaluationEvidenceTests(unittest.TestCase):
                 redirect_stdout(StringIO()):
             record = run_eval.run_once(self.scenario)
 
-        self.assertEqual(record["crashed"], "ModelUnavailable: Unavailable.")
+        self.assertIsNone(record["crashed"])
+        self.assertEqual(record["session"]["error_stage"], "outfit")
+        self.assertEqual(record["session"]["status"], "failed")
         self.assertEqual(record["session"]["selected_item"]["id"], self.item["id"])
         self.assertEqual(record["tool_calls"][1]["inputs"]["new_item"]["id"], self.item["id"])
         self.assertIn("error", record["tool_calls"][1])

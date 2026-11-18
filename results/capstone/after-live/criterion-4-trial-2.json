@@ -1,0 +1,3425 @@
+{
+  "criterion": 4,
+  "trial": 2,
+  "passed": 5,
+  "total": 5,
+  "target": 4,
+  "met": true,
+  "records": [
+    {
+      "kind": "live",
+      "mode": "live",
+      "input": {
+        "query": "graphic tee under $30, size M",
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        }
+      },
+      "fault": null,
+      "blank": null,
+      "session": {
+        "query": "graphic tee under $30, size M",
+        "parsed": {
+          "description": "graphic tee",
+          "size": "M",
+          "max_price": 30.0
+        },
+        "search_results": [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ],
+        "selected_item": {
+          "id": "lst_002",
+          "title": "Y2K Baby Tee — Butterfly Print",
+          "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+          "category": "tops",
+          "style_tags": [
+            "y2k",
+            "vintage",
+            "graphic tee",
+            "cottagecore"
+          ],
+          "size": "S/M",
+          "condition": "excellent",
+          "price": 18.0,
+          "colors": [
+            "white",
+            "pink",
+            "purple"
+          ],
+          "brand": null,
+          "platform": "depop"
+        },
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        },
+        "outfit_suggestion": "Here is a Y2K-inspired outfit featuring your thrifted baby tee:\n\n### Outfit: Classic Y2K Streetwear\n* **Thrifted Item:** Y2K Baby Tee — Butterfly Print\n* **Wardrobe Pieces Used:** \n  * Baggy straight-leg jeans, dark wash (w_001)\n  * Vintage black denim jacket (w_006)\n  * Chunky white sneakers (w_007)\n  * Black crossbody bag (w_010)\n\n**Why it works:**\n* **Fit:** This outfit plays on the classic Y2K proportion contrast by pairing the fitted, cropped baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket on top keeps the silhouette balanced without hiding the waistline.\n* **Colors:** The white base and pink and purple butterfly print on the baby tee pop against the dark blue denim jeans and black jacket. The chunky white sneakers tie the whole look together by pulling in the white from the tee.\n* **Style:** The combination leans heavily into authentic 2000s streetwear, blending vintage graphics with classic denim textures, and is finished off with a practical black crossbody bag for everyday wear.",
+        "fit_card": "Channeling ultimate 2000s streetwear energy today by styling this Y2K Baby Tee — Butterfly Print with baggy dark-wash jeans and my go-to black denim jacket. I scored this pink and purple graphic piece on depop for just $18.00, and the cropped fit looks so good with chunky sneakers.",
+        "error": null,
+        "error_stage": null,
+        "error_code": null,
+        "status": "completed",
+        "steps": [
+          {
+            "stage": "search",
+            "tool": "search_listings (via MCP)",
+            "status": "completed",
+            "duration_ms": 266.338
+          },
+          {
+            "stage": "outfit",
+            "tool": "suggest_outfit",
+            "status": "completed",
+            "duration_ms": 2978.449
+          },
+          {
+            "stage": "caption",
+            "tool": "create_fit_card",
+            "status": "completed",
+            "duration_ms": 2509.603
+          }
+        ],
+        "run_id": "f936bbb0-bf01-4b21-b824-ca05ffefcb53",
+        "duration_ms": 5754.539,
+        "usage": {
+          "model_calls": 2,
+          "tokens": {
+            "prompt": 1717,
+            "output": 330,
+            "total": 2047
+          },
+          "cache_enabled": false,
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "exception": null,
+      "caption_calls": 1,
+      "trace": "[1] search_listings (via MCP)\n      in:  {description: graphic tee, size: M, max_price: 30.0}\n      out: 2 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black\n      →    branch: use the first ranked listing for the outfit\n[2] suggest_outfit\n      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}\n      out: Here is a Y2K-inspired outfit featuring your thrifted baby tee:  ### Outfit: Classic Y2K Streetwear * **Thrift…\n[3] create_fit_card\n      in:  {outfit: Here is a Y2K-inspired outfit featuring your thrifted baby tee:  ### Outfit: Classic Y2K Streetwear * **Thrift…, new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop)}\n      out: Channeling ultimate 2000s streetwear energy today by styling this Y2K Baby Tee — Butterfly Print with baggy da…\n",
+      "controlled_provider_calls": [],
+      "search_results": [
+        [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ]
+      ],
+      "log_entries": [
+        {
+          "schema_version": 1,
+          "timestamp": "2026-11-18T06:08:25.079927+00:00",
+          "run_id": "f936bbb0-bf01-4b21-b824-ca05ffefcb53",
+          "input": {
+            "query": "graphic tee under $30, size M",
+            "wardrobe": {
+              "items": [
+                {
+                  "id": "w_001",
+                  "name": "Baggy straight-leg jeans, dark wash",
+                  "category": "bottoms",
+                  "colors": [
+                    "dark blue",
+                    "indigo"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "streetwear",
+                    "baggy"
+                  ],
+                  "notes": "High-waisted, sits above the hip"
+                },
+                {
+                  "id": "w_002",
+                  "name": "Wide-leg khaki trousers",
+                  "category": "bottoms",
+                  "colors": [
+                    "khaki",
+                    "tan"
+                  ],
+                  "style_tags": [
+                    "earth tones",
+                    "minimal",
+                    "wide-leg"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_003",
+                  "name": "White ribbed tank top",
+                  "category": "tops",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "basics",
+                    "minimal",
+                    "fitted"
+                  ],
+                  "notes": "Goes with everything"
+                },
+                {
+                  "id": "w_004",
+                  "name": "Oversized grey crewneck sweatshirt",
+                  "category": "tops",
+                  "colors": [
+                    "grey",
+                    "charcoal"
+                  ],
+                  "style_tags": [
+                    "oversized",
+                    "basics",
+                    "cozy"
+                  ],
+                  "notes": "Really oversized — drops below the hip"
+                },
+                {
+                  "id": "w_005",
+                  "name": "Black cropped zip hoodie",
+                  "category": "tops",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "athletic",
+                    "streetwear",
+                    "cropped"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_006",
+                  "name": "Vintage black denim jacket",
+                  "category": "outerwear",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "vintage",
+                    "classic"
+                  ],
+                  "notes": "Slightly cropped"
+                },
+                {
+                  "id": "w_007",
+                  "name": "Chunky white sneakers",
+                  "category": "shoes",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "sneakers",
+                    "chunky",
+                    "streetwear"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_008",
+                  "name": "Black combat boots",
+                  "category": "shoes",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "boots",
+                    "grunge",
+                    "classic"
+                  ],
+                  "notes": "Lace-up, mid-ankle height"
+                },
+                {
+                  "id": "w_009",
+                  "name": "Brown leather belt",
+                  "category": "accessories",
+                  "colors": [
+                    "brown"
+                  ],
+                  "style_tags": [
+                    "classic",
+                    "earth tones",
+                    "accessories"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_010",
+                  "name": "Black crossbody bag",
+                  "category": "accessories",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "minimal",
+                    "accessories",
+                    "everyday"
+                  ],
+                  "notes": null
+                }
+              ]
+            }
+          },
+          "output": {
+            "selected_item": {
+              "id": "lst_002",
+              "title": "Y2K Baby Tee — Butterfly Print",
+              "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+              "category": "tops",
+              "style_tags": [
+                "y2k",
+                "vintage",
+                "graphic tee",
+                "cottagecore"
+              ],
+              "size": "S/M",
+              "condition": "excellent",
+              "price": 18.0,
+              "colors": [
+                "white",
+                "pink",
+                "purple"
+              ],
+              "brand": null,
+              "platform": "depop"
+            },
+            "outfit_suggestion": "Here is a Y2K-inspired outfit featuring your thrifted baby tee:\n\n### Outfit: Classic Y2K Streetwear\n* **Thrifted Item:** Y2K Baby Tee — Butterfly Print\n* **Wardrobe Pieces Used:** \n  * Baggy straight-leg jeans, dark wash (w_001)\n  * Vintage black denim jacket (w_006)\n  * Chunky white sneakers (w_007)\n  * Black crossbody bag (w_010)\n\n**Why it works:**\n* **Fit:** This outfit plays on the classic Y2K proportion contrast by pairing the fitted, cropped baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket on top keeps the silhouette balanced without hiding the waistline.\n* **Colors:** The white base and pink and purple butterfly print on the baby tee pop against the dark blue denim jeans and black jacket. The chunky white sneakers tie the whole look together by pulling in the white from the tee.\n* **Style:** The combination leans heavily into authentic 2000s streetwear, blending vintage graphics with classic denim textures, and is finished off with a practical black crossbody bag for everyday wear.",
+            "fit_card": "Channeling ultimate 2000s streetwear energy today by styling this Y2K Baby Tee — Butterfly Print with baggy dark-wash jeans and my go-to black denim jacket. I scored this pink and purple graphic piece on depop for just $18.00, and the cropped fit looks so good with chunky sneakers.",
+            "error": null,
+            "error_stage": null,
+            "error_code": null
+          },
+          "status": "completed",
+          "duration_ms": 5754.539,
+          "steps": [
+            {
+              "stage": "search",
+              "tool": "search_listings (via MCP)",
+              "status": "completed",
+              "duration_ms": 266.338
+            },
+            {
+              "stage": "outfit",
+              "tool": "suggest_outfit",
+              "status": "completed",
+              "duration_ms": 2978.449
+            },
+            {
+              "stage": "caption",
+              "tool": "create_fit_card",
+              "status": "completed",
+              "duration_ms": 2509.603
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "tokens": {
+              "prompt": 1717,
+              "output": 330,
+              "total": 2047
+            },
+            "cache_enabled": false,
+            "model": "gemini-3.5-flash-lite"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "live",
+      "mode": "live",
+      "input": {
+        "query": "graphic tee under $30, size M",
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        }
+      },
+      "fault": null,
+      "blank": null,
+      "session": {
+        "query": "graphic tee under $30, size M",
+        "parsed": {
+          "description": "graphic tee",
+          "size": "M",
+          "max_price": 30.0
+        },
+        "search_results": [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ],
+        "selected_item": {
+          "id": "lst_002",
+          "title": "Y2K Baby Tee — Butterfly Print",
+          "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+          "category": "tops",
+          "style_tags": [
+            "y2k",
+            "vintage",
+            "graphic tee",
+            "cottagecore"
+          ],
+          "size": "S/M",
+          "condition": "excellent",
+          "price": 18.0,
+          "colors": [
+            "white",
+            "pink",
+            "purple"
+          ],
+          "brand": null,
+          "platform": "depop"
+        },
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        },
+        "outfit_suggestion": "Here is an outfit featuring your selected thrifted item:\n\n### Outfit: Y2K Street-Chic\n\n**Selected Thrifted Item:**\n* Y2K Baby Tee — Butterfly Print\n\n**Wardrobe Pieces Used:**\n* Baggy straight-leg jeans, dark wash (w_001)\n* Chunky white sneakers (w_007)\n* Black crossbody bag (w_010)\n\n**Why It Works:**\n* **Fit:** This outfit plays with the classic Y2K proportion of a tight-fitting top paired with loose, high-waisted bottoms. The cropped nature of the baby tee highlights the waist above the high-rise jeans, while the baggy straight-leg silhouette balances the snug top.\n* **Colors:** The white base of the baby tee ties directly into the chunky white sneakers, creating a balanced, intentional color bookend. The dark indigo blue of the jeans grounds the playful, softer pastel tones (pink and purple) of the butterfly graphic without overpowering them.\n* **Style:** It leans fully into authentic early 2000s streetwear. The casual graphic tee and chunky sneakers blend seamlessly with the relaxed denim, while the black crossbody bag adds a practical, minimal finish to the nostalgic look.",
+        "fit_card": "Nothing beats pairing baggy dark wash denim with a fitted little top for that ultimate early 2000s streetwear look. I scored this Y2K Baby Tee — Butterfly Print on depop for just $18.00, and it completely makes the outfit alongside my chunky white sneakers and a black crossbody bag.",
+        "error": null,
+        "error_stage": null,
+        "error_code": null,
+        "status": "completed",
+        "steps": [
+          {
+            "stage": "search",
+            "tool": "search_listings (via MCP)",
+            "status": "completed",
+            "duration_ms": 258.177
+          },
+          {
+            "stage": "outfit",
+            "tool": "suggest_outfit",
+            "status": "completed",
+            "duration_ms": 3091.168
+          },
+          {
+            "stage": "caption",
+            "tool": "create_fit_card",
+            "status": "completed",
+            "duration_ms": 3008.895
+          }
+        ],
+        "run_id": "d25fda93-d771-4d7e-92da-b4e40d9662bf",
+        "duration_ms": 6358.343,
+        "usage": {
+          "model_calls": 2,
+          "tokens": {
+            "prompt": 1716,
+            "output": 325,
+            "total": 2041
+          },
+          "cache_enabled": false,
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "exception": null,
+      "caption_calls": 1,
+      "trace": "[1] search_listings (via MCP)\n      in:  {description: graphic tee, size: M, max_price: 30.0}\n      out: 2 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black\n      →    branch: use the first ranked listing for the outfit\n[2] suggest_outfit\n      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}\n      out: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Street-Chic  **Selected Thrifted Ite…\n[3] create_fit_card\n      in:  {outfit: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Street-Chic  **Selected Thrifted Ite…, new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop)}\n      out: Nothing beats pairing baggy dark wash denim with a fitted little top for that ultimate early 2000s streetwear …\n",
+      "controlled_provider_calls": [],
+      "search_results": [
+        [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ]
+      ],
+      "log_entries": [
+        {
+          "schema_version": 1,
+          "timestamp": "2026-11-18T06:08:30.835946+00:00",
+          "run_id": "d25fda93-d771-4d7e-92da-b4e40d9662bf",
+          "input": {
+            "query": "graphic tee under $30, size M",
+            "wardrobe": {
+              "items": [
+                {
+                  "id": "w_001",
+                  "name": "Baggy straight-leg jeans, dark wash",
+                  "category": "bottoms",
+                  "colors": [
+                    "dark blue",
+                    "indigo"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "streetwear",
+                    "baggy"
+                  ],
+                  "notes": "High-waisted, sits above the hip"
+                },
+                {
+                  "id": "w_002",
+                  "name": "Wide-leg khaki trousers",
+                  "category": "bottoms",
+                  "colors": [
+                    "khaki",
+                    "tan"
+                  ],
+                  "style_tags": [
+                    "earth tones",
+                    "minimal",
+                    "wide-leg"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_003",
+                  "name": "White ribbed tank top",
+                  "category": "tops",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "basics",
+                    "minimal",
+                    "fitted"
+                  ],
+                  "notes": "Goes with everything"
+                },
+                {
+                  "id": "w_004",
+                  "name": "Oversized grey crewneck sweatshirt",
+                  "category": "tops",
+                  "colors": [
+                    "grey",
+                    "charcoal"
+                  ],
+                  "style_tags": [
+                    "oversized",
+                    "basics",
+                    "cozy"
+                  ],
+                  "notes": "Really oversized — drops below the hip"
+                },
+                {
+                  "id": "w_005",
+                  "name": "Black cropped zip hoodie",
+                  "category": "tops",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "athletic",
+                    "streetwear",
+                    "cropped"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_006",
+                  "name": "Vintage black denim jacket",
+                  "category": "outerwear",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "vintage",
+                    "classic"
+                  ],
+                  "notes": "Slightly cropped"
+                },
+                {
+                  "id": "w_007",
+                  "name": "Chunky white sneakers",
+                  "category": "shoes",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "sneakers",
+                    "chunky",
+                    "streetwear"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_008",
+                  "name": "Black combat boots",
+                  "category": "shoes",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "boots",
+                    "grunge",
+                    "classic"
+                  ],
+                  "notes": "Lace-up, mid-ankle height"
+                },
+                {
+                  "id": "w_009",
+                  "name": "Brown leather belt",
+                  "category": "accessories",
+                  "colors": [
+                    "brown"
+                  ],
+                  "style_tags": [
+                    "classic",
+                    "earth tones",
+                    "accessories"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_010",
+                  "name": "Black crossbody bag",
+                  "category": "accessories",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "minimal",
+                    "accessories",
+                    "everyday"
+                  ],
+                  "notes": null
+                }
+              ]
+            }
+          },
+          "output": {
+            "selected_item": {
+              "id": "lst_002",
+              "title": "Y2K Baby Tee — Butterfly Print",
+              "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+              "category": "tops",
+              "style_tags": [
+                "y2k",
+                "vintage",
+                "graphic tee",
+                "cottagecore"
+              ],
+              "size": "S/M",
+              "condition": "excellent",
+              "price": 18.0,
+              "colors": [
+                "white",
+                "pink",
+                "purple"
+              ],
+              "brand": null,
+              "platform": "depop"
+            },
+            "outfit_suggestion": "Here is an outfit featuring your selected thrifted item:\n\n### Outfit: Y2K Street-Chic\n\n**Selected Thrifted Item:**\n* Y2K Baby Tee — Butterfly Print\n\n**Wardrobe Pieces Used:**\n* Baggy straight-leg jeans, dark wash (w_001)\n* Chunky white sneakers (w_007)\n* Black crossbody bag (w_010)\n\n**Why It Works:**\n* **Fit:** This outfit plays with the classic Y2K proportion of a tight-fitting top paired with loose, high-waisted bottoms. The cropped nature of the baby tee highlights the waist above the high-rise jeans, while the baggy straight-leg silhouette balances the snug top.\n* **Colors:** The white base of the baby tee ties directly into the chunky white sneakers, creating a balanced, intentional color bookend. The dark indigo blue of the jeans grounds the playful, softer pastel tones (pink and purple) of the butterfly graphic without overpowering them.\n* **Style:** It leans fully into authentic early 2000s streetwear. The casual graphic tee and chunky sneakers blend seamlessly with the relaxed denim, while the black crossbody bag adds a practical, minimal finish to the nostalgic look.",
+            "fit_card": "Nothing beats pairing baggy dark wash denim with a fitted little top for that ultimate early 2000s streetwear look. I scored this Y2K Baby Tee — Butterfly Print on depop for just $18.00, and it completely makes the outfit alongside my chunky white sneakers and a black crossbody bag.",
+            "error": null,
+            "error_stage": null,
+            "error_code": null
+          },
+          "status": "completed",
+          "duration_ms": 6358.343,
+          "steps": [
+            {
+              "stage": "search",
+              "tool": "search_listings (via MCP)",
+              "status": "completed",
+              "duration_ms": 258.177
+            },
+            {
+              "stage": "outfit",
+              "tool": "suggest_outfit",
+              "status": "completed",
+              "duration_ms": 3091.168
+            },
+            {
+              "stage": "caption",
+              "tool": "create_fit_card",
+              "status": "completed",
+              "duration_ms": 3008.895
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "tokens": {
+              "prompt": 1716,
+              "output": 325,
+              "total": 2041
+            },
+            "cache_enabled": false,
+            "model": "gemini-3.5-flash-lite"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "live",
+      "mode": "live",
+      "input": {
+        "query": "graphic tee under $30, size M",
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        }
+      },
+      "fault": null,
+      "blank": null,
+      "session": {
+        "query": "graphic tee under $30, size M",
+        "parsed": {
+          "description": "graphic tee",
+          "size": "M",
+          "max_price": 30.0
+        },
+        "search_results": [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ],
+        "selected_item": {
+          "id": "lst_002",
+          "title": "Y2K Baby Tee — Butterfly Print",
+          "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+          "category": "tops",
+          "style_tags": [
+            "y2k",
+            "vintage",
+            "graphic tee",
+            "cottagecore"
+          ],
+          "size": "S/M",
+          "condition": "excellent",
+          "price": 18.0,
+          "colors": [
+            "white",
+            "pink",
+            "purple"
+          ],
+          "brand": null,
+          "platform": "depop"
+        },
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        },
+        "outfit_suggestion": "### Outfit: Y2K Streetwear Contrast\n\n**Selected Thrifted Item:**\n*   Y2K Baby Tee — Butterfly Print (White, pink, purple)\n\n**Wardrobe Pieces Used:**\n*   **Bottoms:** Baggy straight-leg jeans, dark wash (Dark blue/indigo)\n*   **Outerwear:** Vintage black denim jacket\n*   **Shoes:** Chunky white sneakers\n*   **Accessories:** Black crossbody bag\n\n**Why it works:**\n*   **Colors:** The white base and pink-and-purple butterfly print of the baby tee pop cleanly against the dark blue indigo jeans and the vintage black denim jacket. The chunky white sneakers tie back to the white in the tee, creating a balanced and cohesive color palette.\n*   **Fit:** This outfit plays on the classic Y2K proportion contrast by pairing a super fitted, cropped baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket on top maintains the structured silhouette without hiding the waistline.\n*   **Style:** It leans fully into authentic 2000s streetwear and vintage aesthetics. The graphic tee's nostalgic vibe meshes effortlessly with denim-on-denim styling, chunky footwear, and minimal functional accessories like the black crossbody bag.",
+        "fit_card": "Paired this nostalgic little top with baggy indigo denim and a worn-in black jacket for the ultimate 2000s streetwear look. I managed to score the Y2K Baby Tee — Butterfly Print on depop for just $18.00, and the pink-and-purple graphic is even cuter in person. It’s the exact fitted, cropped vibe I've been hunting for to balance out my looser bottoms.",
+        "error": null,
+        "error_stage": null,
+        "error_code": null,
+        "status": "completed",
+        "steps": [
+          {
+            "stage": "search",
+            "tool": "search_listings (via MCP)",
+            "status": "completed",
+            "duration_ms": 265.949
+          },
+          {
+            "stage": "outfit",
+            "tool": "suggest_outfit",
+            "status": "completed",
+            "duration_ms": 2722.968
+          },
+          {
+            "stage": "caption",
+            "tool": "create_fit_card",
+            "status": "completed",
+            "duration_ms": 21142.336
+          }
+        ],
+        "run_id": "c45efe76-0fed-4414-9e29-6ed1f5334c89",
+        "duration_ms": 24131.407,
+        "usage": {
+          "model_calls": 2,
+          "tokens": {
+            "prompt": 1723,
+            "output": 358,
+            "total": 2081
+          },
+          "cache_enabled": false,
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "exception": null,
+      "caption_calls": 1,
+      "trace": "[1] search_listings (via MCP)\n      in:  {description: graphic tee, size: M, max_price: 30.0}\n      out: 2 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black\n      →    branch: use the first ranked listing for the outfit\n[2] suggest_outfit\n      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}\n      out: ### Outfit: Y2K Streetwear Contrast  **Selected Thrifted Item:** *   Y2K Baby Tee — Butterfly Print (White, pi…\n[3] create_fit_card\n      in:  {outfit: ### Outfit: Y2K Streetwear Contrast  **Selected Thrifted Item:** *   Y2K Baby Tee — Butterfly Print (White, pi…, new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop)}\n      out: Paired this nostalgic little top with baggy indigo denim and a worn-in black jacket for the ultimate 2000s str…\n",
+      "controlled_provider_calls": [],
+      "search_results": [
+        [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ]
+      ],
+      "log_entries": [
+        {
+          "schema_version": 1,
+          "timestamp": "2026-11-18T06:08:37.197268+00:00",
+          "run_id": "c45efe76-0fed-4414-9e29-6ed1f5334c89",
+          "input": {
+            "query": "graphic tee under $30, size M",
+            "wardrobe": {
+              "items": [
+                {
+                  "id": "w_001",
+                  "name": "Baggy straight-leg jeans, dark wash",
+                  "category": "bottoms",
+                  "colors": [
+                    "dark blue",
+                    "indigo"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "streetwear",
+                    "baggy"
+                  ],
+                  "notes": "High-waisted, sits above the hip"
+                },
+                {
+                  "id": "w_002",
+                  "name": "Wide-leg khaki trousers",
+                  "category": "bottoms",
+                  "colors": [
+                    "khaki",
+                    "tan"
+                  ],
+                  "style_tags": [
+                    "earth tones",
+                    "minimal",
+                    "wide-leg"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_003",
+                  "name": "White ribbed tank top",
+                  "category": "tops",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "basics",
+                    "minimal",
+                    "fitted"
+                  ],
+                  "notes": "Goes with everything"
+                },
+                {
+                  "id": "w_004",
+                  "name": "Oversized grey crewneck sweatshirt",
+                  "category": "tops",
+                  "colors": [
+                    "grey",
+                    "charcoal"
+                  ],
+                  "style_tags": [
+                    "oversized",
+                    "basics",
+                    "cozy"
+                  ],
+                  "notes": "Really oversized — drops below the hip"
+                },
+                {
+                  "id": "w_005",
+                  "name": "Black cropped zip hoodie",
+                  "category": "tops",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "athletic",
+                    "streetwear",
+                    "cropped"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_006",
+                  "name": "Vintage black denim jacket",
+                  "category": "outerwear",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "vintage",
+                    "classic"
+                  ],
+                  "notes": "Slightly cropped"
+                },
+                {
+                  "id": "w_007",
+                  "name": "Chunky white sneakers",
+                  "category": "shoes",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "sneakers",
+                    "chunky",
+                    "streetwear"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_008",
+                  "name": "Black combat boots",
+                  "category": "shoes",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "boots",
+                    "grunge",
+                    "classic"
+                  ],
+                  "notes": "Lace-up, mid-ankle height"
+                },
+                {
+                  "id": "w_009",
+                  "name": "Brown leather belt",
+                  "category": "accessories",
+                  "colors": [
+                    "brown"
+                  ],
+                  "style_tags": [
+                    "classic",
+                    "earth tones",
+                    "accessories"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_010",
+                  "name": "Black crossbody bag",
+                  "category": "accessories",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "minimal",
+                    "accessories",
+                    "everyday"
+                  ],
+                  "notes": null
+                }
+              ]
+            }
+          },
+          "output": {
+            "selected_item": {
+              "id": "lst_002",
+              "title": "Y2K Baby Tee — Butterfly Print",
+              "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+              "category": "tops",
+              "style_tags": [
+                "y2k",
+                "vintage",
+                "graphic tee",
+                "cottagecore"
+              ],
+              "size": "S/M",
+              "condition": "excellent",
+              "price": 18.0,
+              "colors": [
+                "white",
+                "pink",
+                "purple"
+              ],
+              "brand": null,
+              "platform": "depop"
+            },
+            "outfit_suggestion": "### Outfit: Y2K Streetwear Contrast\n\n**Selected Thrifted Item:**\n*   Y2K Baby Tee — Butterfly Print (White, pink, purple)\n\n**Wardrobe Pieces Used:**\n*   **Bottoms:** Baggy straight-leg jeans, dark wash (Dark blue/indigo)\n*   **Outerwear:** Vintage black denim jacket\n*   **Shoes:** Chunky white sneakers\n*   **Accessories:** Black crossbody bag\n\n**Why it works:**\n*   **Colors:** The white base and pink-and-purple butterfly print of the baby tee pop cleanly against the dark blue indigo jeans and the vintage black denim jacket. The chunky white sneakers tie back to the white in the tee, creating a balanced and cohesive color palette.\n*   **Fit:** This outfit plays on the classic Y2K proportion contrast by pairing a super fitted, cropped baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket on top maintains the structured silhouette without hiding the waistline.\n*   **Style:** It leans fully into authentic 2000s streetwear and vintage aesthetics. The graphic tee's nostalgic vibe meshes effortlessly with denim-on-denim styling, chunky footwear, and minimal functional accessories like the black crossbody bag.",
+            "fit_card": "Paired this nostalgic little top with baggy indigo denim and a worn-in black jacket for the ultimate 2000s streetwear look. I managed to score the Y2K Baby Tee — Butterfly Print on depop for just $18.00, and the pink-and-purple graphic is even cuter in person. It’s the exact fitted, cropped vibe I've been hunting for to balance out my looser bottoms.",
+            "error": null,
+            "error_stage": null,
+            "error_code": null
+          },
+          "status": "completed",
+          "duration_ms": 24131.407,
+          "steps": [
+            {
+              "stage": "search",
+              "tool": "search_listings (via MCP)",
+              "status": "completed",
+              "duration_ms": 265.949
+            },
+            {
+              "stage": "outfit",
+              "tool": "suggest_outfit",
+              "status": "completed",
+              "duration_ms": 2722.968
+            },
+            {
+              "stage": "caption",
+              "tool": "create_fit_card",
+              "status": "completed",
+              "duration_ms": 21142.336
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "tokens": {
+              "prompt": 1723,
+              "output": 358,
+              "total": 2081
+            },
+            "cache_enabled": false,
+            "model": "gemini-3.5-flash-lite"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "live",
+      "mode": "live",
+      "input": {
+        "query": "graphic tee under $30, size M",
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        }
+      },
+      "fault": null,
+      "blank": null,
+      "session": {
+        "query": "graphic tee under $30, size M",
+        "parsed": {
+          "description": "graphic tee",
+          "size": "M",
+          "max_price": 30.0
+        },
+        "search_results": [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ],
+        "selected_item": {
+          "id": "lst_002",
+          "title": "Y2K Baby Tee — Butterfly Print",
+          "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+          "category": "tops",
+          "style_tags": [
+            "y2k",
+            "vintage",
+            "graphic tee",
+            "cottagecore"
+          ],
+          "size": "S/M",
+          "condition": "excellent",
+          "price": 18.0,
+          "colors": [
+            "white",
+            "pink",
+            "purple"
+          ],
+          "brand": null,
+          "platform": "depop"
+        },
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        },
+        "outfit_suggestion": "Here is an outfit featuring your new Y2K baby tee:\n\n### Outfit: Y2K Streetwear Contrast\n\n**Selected Thrifted Item:**\n* Y2K Baby Tee — Butterfly Print\n\n**Wardrobe Pieces Used:**\n* Baggy straight-leg jeans, dark wash (w_001)\n* Vintage black denim jacket (w_006)\n* Chunky white sneakers (w_007)\n* Black crossbody bag (w_010)\n\n**Why It Works:**\n* **Colors:** The white base and pink and purple butterfly print of the baby tee pop against the deep dark blue of the jeans and the neutral black of the jacket and bag. The white sneakers tie back to the white in the tee, creating a balanced and cohesive look.\n* **Fit:** This outfit plays with classic Y2K proportions by pairing the fitted, crop-length baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket over top maintains the waistline while adding structure. \n* **Style:** The combination leans heavily into vintage streetwear. The graphic butterfly tee brings in nostalgic early-2000s energy, which is grounded and edged up by the denim-on-denim elements, chunky sneakers, and minimal crossbody bag.",
+        "fit_card": "Pulled off the ultimate early-2000s streetwear look by pairing baggy dark-wash jeans with this Y2K Baby Tee — Butterfly Print I just scored. I threw on my favorite vintage black denim jacket and chunky sneakers to edge up the whole vibe. Snagged it on depop for just $18.00 and I am honestly obsessed.",
+        "error": null,
+        "error_stage": null,
+        "error_code": null,
+        "status": "completed",
+        "steps": [
+          {
+            "stage": "search",
+            "tool": "search_listings (via MCP)",
+            "status": "completed",
+            "duration_ms": 356.64
+          },
+          {
+            "stage": "outfit",
+            "tool": "suggest_outfit",
+            "status": "completed",
+            "duration_ms": 4903.113
+          },
+          {
+            "stage": "caption",
+            "tool": "create_fit_card",
+            "status": "completed",
+            "duration_ms": 2091.67
+          }
+        ],
+        "run_id": "6747cb5f-a34e-48a9-95ec-0f4721c9ea62",
+        "duration_ms": 7351.575,
+        "usage": {
+          "model_calls": 2,
+          "tokens": {
+            "prompt": 1729,
+            "output": 348,
+            "total": 2077
+          },
+          "cache_enabled": false,
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "exception": null,
+      "caption_calls": 1,
+      "trace": "[1] search_listings (via MCP)\n      in:  {description: graphic tee, size: M, max_price: 30.0}\n      out: 2 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black\n      →    branch: use the first ranked listing for the outfit\n[2] suggest_outfit\n      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}\n      out: Here is an outfit featuring your new Y2K baby tee:  ### Outfit: Y2K Streetwear Contrast  **Selected Thrifted I…\n[3] create_fit_card\n      in:  {outfit: Here is an outfit featuring your new Y2K baby tee:  ### Outfit: Y2K Streetwear Contrast  **Selected Thrifted I…, new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop)}\n      out: Pulled off the ultimate early-2000s streetwear look by pairing baggy dark-wash jeans with this Y2K Baby Tee — …\n",
+      "controlled_provider_calls": [],
+      "search_results": [
+        [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ]
+      ],
+      "log_entries": [
+        {
+          "schema_version": 1,
+          "timestamp": "2026-11-18T06:09:01.335054+00:00",
+          "run_id": "6747cb5f-a34e-48a9-95ec-0f4721c9ea62",
+          "input": {
+            "query": "graphic tee under $30, size M",
+            "wardrobe": {
+              "items": [
+                {
+                  "id": "w_001",
+                  "name": "Baggy straight-leg jeans, dark wash",
+                  "category": "bottoms",
+                  "colors": [
+                    "dark blue",
+                    "indigo"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "streetwear",
+                    "baggy"
+                  ],
+                  "notes": "High-waisted, sits above the hip"
+                },
+                {
+                  "id": "w_002",
+                  "name": "Wide-leg khaki trousers",
+                  "category": "bottoms",
+                  "colors": [
+                    "khaki",
+                    "tan"
+                  ],
+                  "style_tags": [
+                    "earth tones",
+                    "minimal",
+                    "wide-leg"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_003",
+                  "name": "White ribbed tank top",
+                  "category": "tops",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "basics",
+                    "minimal",
+                    "fitted"
+                  ],
+                  "notes": "Goes with everything"
+                },
+                {
+                  "id": "w_004",
+                  "name": "Oversized grey crewneck sweatshirt",
+                  "category": "tops",
+                  "colors": [
+                    "grey",
+                    "charcoal"
+                  ],
+                  "style_tags": [
+                    "oversized",
+                    "basics",
+                    "cozy"
+                  ],
+                  "notes": "Really oversized — drops below the hip"
+                },
+                {
+                  "id": "w_005",
+                  "name": "Black cropped zip hoodie",
+                  "category": "tops",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "athletic",
+                    "streetwear",
+                    "cropped"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_006",
+                  "name": "Vintage black denim jacket",
+                  "category": "outerwear",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "vintage",
+                    "classic"
+                  ],
+                  "notes": "Slightly cropped"
+                },
+                {
+                  "id": "w_007",
+                  "name": "Chunky white sneakers",
+                  "category": "shoes",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "sneakers",
+                    "chunky",
+                    "streetwear"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_008",
+                  "name": "Black combat boots",
+                  "category": "shoes",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "boots",
+                    "grunge",
+                    "classic"
+                  ],
+                  "notes": "Lace-up, mid-ankle height"
+                },
+                {
+                  "id": "w_009",
+                  "name": "Brown leather belt",
+                  "category": "accessories",
+                  "colors": [
+                    "brown"
+                  ],
+                  "style_tags": [
+                    "classic",
+                    "earth tones",
+                    "accessories"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_010",
+                  "name": "Black crossbody bag",
+                  "category": "accessories",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "minimal",
+                    "accessories",
+                    "everyday"
+                  ],
+                  "notes": null
+                }
+              ]
+            }
+          },
+          "output": {
+            "selected_item": {
+              "id": "lst_002",
+              "title": "Y2K Baby Tee — Butterfly Print",
+              "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+              "category": "tops",
+              "style_tags": [
+                "y2k",
+                "vintage",
+                "graphic tee",
+                "cottagecore"
+              ],
+              "size": "S/M",
+              "condition": "excellent",
+              "price": 18.0,
+              "colors": [
+                "white",
+                "pink",
+                "purple"
+              ],
+              "brand": null,
+              "platform": "depop"
+            },
+            "outfit_suggestion": "Here is an outfit featuring your new Y2K baby tee:\n\n### Outfit: Y2K Streetwear Contrast\n\n**Selected Thrifted Item:**\n* Y2K Baby Tee — Butterfly Print\n\n**Wardrobe Pieces Used:**\n* Baggy straight-leg jeans, dark wash (w_001)\n* Vintage black denim jacket (w_006)\n* Chunky white sneakers (w_007)\n* Black crossbody bag (w_010)\n\n**Why It Works:**\n* **Colors:** The white base and pink and purple butterfly print of the baby tee pop against the deep dark blue of the jeans and the neutral black of the jacket and bag. The white sneakers tie back to the white in the tee, creating a balanced and cohesive look.\n* **Fit:** This outfit plays with classic Y2K proportions by pairing the fitted, crop-length baby tee with high-waisted, baggy straight-leg jeans. Layering the slightly cropped vintage denim jacket over top maintains the waistline while adding structure. \n* **Style:** The combination leans heavily into vintage streetwear. The graphic butterfly tee brings in nostalgic early-2000s energy, which is grounded and edged up by the denim-on-denim elements, chunky sneakers, and minimal crossbody bag.",
+            "fit_card": "Pulled off the ultimate early-2000s streetwear look by pairing baggy dark-wash jeans with this Y2K Baby Tee — Butterfly Print I just scored. I threw on my favorite vintage black denim jacket and chunky sneakers to edge up the whole vibe. Snagged it on depop for just $18.00 and I am honestly obsessed.",
+            "error": null,
+            "error_stage": null,
+            "error_code": null
+          },
+          "status": "completed",
+          "duration_ms": 7351.575,
+          "steps": [
+            {
+              "stage": "search",
+              "tool": "search_listings (via MCP)",
+              "status": "completed",
+              "duration_ms": 356.64
+            },
+            {
+              "stage": "outfit",
+              "tool": "suggest_outfit",
+              "status": "completed",
+              "duration_ms": 4903.113
+            },
+            {
+              "stage": "caption",
+              "tool": "create_fit_card",
+              "status": "completed",
+              "duration_ms": 2091.67
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "tokens": {
+              "prompt": 1729,
+              "output": 348,
+              "total": 2077
+            },
+            "cache_enabled": false,
+            "model": "gemini-3.5-flash-lite"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "live",
+      "mode": "live",
+      "input": {
+        "query": "graphic tee under $30, size M",
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        }
+      },
+      "fault": null,
+      "blank": null,
+      "session": {
+        "query": "graphic tee under $30, size M",
+        "parsed": {
+          "description": "graphic tee",
+          "size": "M",
+          "max_price": 30.0
+        },
+        "search_results": [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ],
+        "selected_item": {
+          "id": "lst_002",
+          "title": "Y2K Baby Tee — Butterfly Print",
+          "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+          "category": "tops",
+          "style_tags": [
+            "y2k",
+            "vintage",
+            "graphic tee",
+            "cottagecore"
+          ],
+          "size": "S/M",
+          "condition": "excellent",
+          "price": 18.0,
+          "colors": [
+            "white",
+            "pink",
+            "purple"
+          ],
+          "brand": null,
+          "platform": "depop"
+        },
+        "wardrobe": {
+          "items": [
+            {
+              "id": "w_001",
+              "name": "Baggy straight-leg jeans, dark wash",
+              "category": "bottoms",
+              "colors": [
+                "dark blue",
+                "indigo"
+              ],
+              "style_tags": [
+                "denim",
+                "streetwear",
+                "baggy"
+              ],
+              "notes": "High-waisted, sits above the hip"
+            },
+            {
+              "id": "w_002",
+              "name": "Wide-leg khaki trousers",
+              "category": "bottoms",
+              "colors": [
+                "khaki",
+                "tan"
+              ],
+              "style_tags": [
+                "earth tones",
+                "minimal",
+                "wide-leg"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_003",
+              "name": "White ribbed tank top",
+              "category": "tops",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "basics",
+                "minimal",
+                "fitted"
+              ],
+              "notes": "Goes with everything"
+            },
+            {
+              "id": "w_004",
+              "name": "Oversized grey crewneck sweatshirt",
+              "category": "tops",
+              "colors": [
+                "grey",
+                "charcoal"
+              ],
+              "style_tags": [
+                "oversized",
+                "basics",
+                "cozy"
+              ],
+              "notes": "Really oversized — drops below the hip"
+            },
+            {
+              "id": "w_005",
+              "name": "Black cropped zip hoodie",
+              "category": "tops",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "athletic",
+                "streetwear",
+                "cropped"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_006",
+              "name": "Vintage black denim jacket",
+              "category": "outerwear",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "denim",
+                "vintage",
+                "classic"
+              ],
+              "notes": "Slightly cropped"
+            },
+            {
+              "id": "w_007",
+              "name": "Chunky white sneakers",
+              "category": "shoes",
+              "colors": [
+                "white"
+              ],
+              "style_tags": [
+                "sneakers",
+                "chunky",
+                "streetwear"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_008",
+              "name": "Black combat boots",
+              "category": "shoes",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "boots",
+                "grunge",
+                "classic"
+              ],
+              "notes": "Lace-up, mid-ankle height"
+            },
+            {
+              "id": "w_009",
+              "name": "Brown leather belt",
+              "category": "accessories",
+              "colors": [
+                "brown"
+              ],
+              "style_tags": [
+                "classic",
+                "earth tones",
+                "accessories"
+              ],
+              "notes": null
+            },
+            {
+              "id": "w_010",
+              "name": "Black crossbody bag",
+              "category": "accessories",
+              "colors": [
+                "black"
+              ],
+              "style_tags": [
+                "minimal",
+                "accessories",
+                "everyday"
+              ],
+              "notes": null
+            }
+          ]
+        },
+        "outfit_suggestion": "Here is an outfit featuring your selected thrifted item:\n\n### Outfit: Y2K Streetwear Contrast\n\n* **Selected Thrifted Item:** Y2K Baby Tee — Butterfly Print\n* **Wardrobe Pieces Used:** \n  * Baggy straight-leg jeans, dark wash (`w_001`)\n  * Vintage black denim jacket (`w_006`)\n  * Chunky white sneakers (`w_007`)\n  * Black crossbody bag (`w_010`)\n\n**Why it works:**\n* **Fit:** This outfit plays with classic Y2K proportions by balancing the tight, cropped fit of the baby tee with the high-waisted, baggy silhouette of the dark wash jeans. The slightly cropped vintage denim jacket mirrors the top's length without overwhelming the shape.\n* **Colors:** The white base of the baby tee ties directly into the chunky white sneakers, creating a balanced anchor for the look. The dark blue denim and black jacket/bag provide a neutral, edgy contrast that lets the pink and purple butterfly graphic pop.\n* **Style:** It leans heavily into authentic Y2K streetwear, blending the vintage, girly graphic tee with the grungy, oversized utility of baggy denim and chunky sneakers.",
+        "fit_card": "Channeling total early 2000s street style by pairing baggy dark wash denim and a chunky black jacket with this sweet Y2K Baby Tee — Butterfly Print. I scored it on depop for just $18.00 and it's honestly the ultimate little top for balancing out oversized bottoms.",
+        "error": null,
+        "error_stage": null,
+        "error_code": null,
+        "status": "completed",
+        "steps": [
+          {
+            "stage": "search",
+            "tool": "search_listings (via MCP)",
+            "status": "completed",
+            "duration_ms": 254.023
+          },
+          {
+            "stage": "outfit",
+            "tool": "suggest_outfit",
+            "status": "completed",
+            "duration_ms": 3791.102
+          },
+          {
+            "stage": "caption",
+            "tool": "create_fit_card",
+            "status": "completed",
+            "duration_ms": 851.458
+          }
+        ],
+        "run_id": "b82f125b-878f-415e-894c-24acb04e763b",
+        "duration_ms": 4896.669,
+        "usage": {
+          "model_calls": 2,
+          "tokens": {
+            "prompt": 1713,
+            "output": 321,
+            "total": 2034
+          },
+          "cache_enabled": false,
+          "model": "gemini-3.5-flash-lite"
+        }
+      },
+      "exception": null,
+      "caption_calls": 1,
+      "trace": "[1] search_listings (via MCP)\n      in:  {description: graphic tee, size: M, max_price: 30.0}\n      out: 2 items: Y2K Baby Tee — Butterfly Print, Mesh Long-Sleeve Top — Black\n      →    branch: use the first ranked listing for the outfit\n[2] suggest_outfit\n      in:  {new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop), wardrobe: {items: 10 items: {'id': 'w_001', 'name': 'Baggy straight-leg jeans, dark wash…}}\n      out: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  * **Selected Th…\n[3] create_fit_card\n      in:  {outfit: Here is an outfit featuring your selected thrifted item:  ### Outfit: Y2K Streetwear Contrast  * **Selected Th…, new_item: lst_002: Y2K Baby Tee — Butterfly Print ($18.0, depop)}\n      out: Channeling total early 2000s street style by pairing baggy dark wash denim and a chunky black jacket with this…\n",
+      "controlled_provider_calls": [],
+      "search_results": [
+        [
+          {
+            "id": "lst_002",
+            "title": "Y2K Baby Tee — Butterfly Print",
+            "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "vintage",
+              "graphic tee",
+              "cottagecore"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 18.0,
+            "colors": [
+              "white",
+              "pink",
+              "purple"
+            ],
+            "brand": null,
+            "platform": "depop"
+          },
+          {
+            "id": "lst_017",
+            "title": "Mesh Long-Sleeve Top — Black",
+            "description": "Sheer black mesh long-sleeve. Great for layering under a graphic tee or over a bralette. Stretchy material, fits true to size.",
+            "category": "tops",
+            "style_tags": [
+              "y2k",
+              "grunge",
+              "goth",
+              "layering"
+            ],
+            "size": "S/M",
+            "condition": "excellent",
+            "price": 15.0,
+            "colors": [
+              "black"
+            ],
+            "brand": null,
+            "platform": "depop"
+          }
+        ]
+      ],
+      "log_entries": [
+        {
+          "schema_version": 1,
+          "timestamp": "2026-11-18T06:09:08.688410+00:00",
+          "run_id": "b82f125b-878f-415e-894c-24acb04e763b",
+          "input": {
+            "query": "graphic tee under $30, size M",
+            "wardrobe": {
+              "items": [
+                {
+                  "id": "w_001",
+                  "name": "Baggy straight-leg jeans, dark wash",
+                  "category": "bottoms",
+                  "colors": [
+                    "dark blue",
+                    "indigo"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "streetwear",
+                    "baggy"
+                  ],
+                  "notes": "High-waisted, sits above the hip"
+                },
+                {
+                  "id": "w_002",
+                  "name": "Wide-leg khaki trousers",
+                  "category": "bottoms",
+                  "colors": [
+                    "khaki",
+                    "tan"
+                  ],
+                  "style_tags": [
+                    "earth tones",
+                    "minimal",
+                    "wide-leg"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_003",
+                  "name": "White ribbed tank top",
+                  "category": "tops",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "basics",
+                    "minimal",
+                    "fitted"
+                  ],
+                  "notes": "Goes with everything"
+                },
+                {
+                  "id": "w_004",
+                  "name": "Oversized grey crewneck sweatshirt",
+                  "category": "tops",
+                  "colors": [
+                    "grey",
+                    "charcoal"
+                  ],
+                  "style_tags": [
+                    "oversized",
+                    "basics",
+                    "cozy"
+                  ],
+                  "notes": "Really oversized — drops below the hip"
+                },
+                {
+                  "id": "w_005",
+                  "name": "Black cropped zip hoodie",
+                  "category": "tops",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "athletic",
+                    "streetwear",
+                    "cropped"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_006",
+                  "name": "Vintage black denim jacket",
+                  "category": "outerwear",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "denim",
+                    "vintage",
+                    "classic"
+                  ],
+                  "notes": "Slightly cropped"
+                },
+                {
+                  "id": "w_007",
+                  "name": "Chunky white sneakers",
+                  "category": "shoes",
+                  "colors": [
+                    "white"
+                  ],
+                  "style_tags": [
+                    "sneakers",
+                    "chunky",
+                    "streetwear"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_008",
+                  "name": "Black combat boots",
+                  "category": "shoes",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "boots",
+                    "grunge",
+                    "classic"
+                  ],
+                  "notes": "Lace-up, mid-ankle height"
+                },
+                {
+                  "id": "w_009",
+                  "name": "Brown leather belt",
+                  "category": "accessories",
+                  "colors": [
+                    "brown"
+                  ],
+                  "style_tags": [
+                    "classic",
+                    "earth tones",
+                    "accessories"
+                  ],
+                  "notes": null
+                },
+                {
+                  "id": "w_010",
+                  "name": "Black crossbody bag",
+                  "category": "accessories",
+                  "colors": [
+                    "black"
+                  ],
+                  "style_tags": [
+                    "minimal",
+                    "accessories",
+                    "everyday"
+                  ],
+                  "notes": null
+                }
+              ]
+            }
+          },
+          "output": {
+            "selected_item": {
+              "id": "lst_002",
+              "title": "Y2K Baby Tee — Butterfly Print",
+              "description": "Super cute early 2000s baby tee with butterfly graphic. Fitted crop length. Tag says medium but fits like a small.",
+              "category": "tops",
+              "style_tags": [
+                "y2k",
+                "vintage",
+                "graphic tee",
+                "cottagecore"
+              ],
+              "size": "S/M",
+              "condition": "excellent",
+              "price": 18.0,
+              "colors": [
+                "white",
+                "pink",
+                "purple"
+              ],
+              "brand": null,
+              "platform": "depop"
+            },
+            "outfit_suggestion": "Here is an outfit featuring your selected thrifted item:\n\n### Outfit: Y2K Streetwear Contrast\n\n* **Selected Thrifted Item:** Y2K Baby Tee — Butterfly Print\n* **Wardrobe Pieces Used:** \n  * Baggy straight-leg jeans, dark wash (`w_001`)\n  * Vintage black denim jacket (`w_006`)\n  * Chunky white sneakers (`w_007`)\n  * Black crossbody bag (`w_010`)\n\n**Why it works:**\n* **Fit:** This outfit plays with classic Y2K proportions by balancing the tight, cropped fit of the baby tee with the high-waisted, baggy silhouette of the dark wash jeans. The slightly cropped vintage denim jacket mirrors the top's length without overwhelming the shape.\n* **Colors:** The white base of the baby tee ties directly into the chunky white sneakers, creating a balanced anchor for the look. The dark blue denim and black jacket/bag provide a neutral, edgy contrast that lets the pink and purple butterfly graphic pop.\n* **Style:** It leans heavily into authentic Y2K streetwear, blending the vintage, girly graphic tee with the grungy, oversized utility of baggy denim and chunky sneakers.",
+            "fit_card": "Channeling total early 2000s street style by pairing baggy dark wash denim and a chunky black jacket with this sweet Y2K Baby Tee — Butterfly Print. I scored it on depop for just $18.00 and it's honestly the ultimate little top for balancing out oversized bottoms.",
+            "error": null,
+            "error_stage": null,
+            "error_code": null
+          },
+          "status": "completed",
+          "duration_ms": 4896.669,
+          "steps": [
+            {
+              "stage": "search",
+              "tool": "search_listings (via MCP)",
+              "status": "completed",
+              "duration_ms": 254.023
+            },
+            {
+              "stage": "outfit",
+              "tool": "suggest_outfit",
+              "status": "completed",
+              "duration_ms": 3791.102
+            },
+            {
+              "stage": "caption",
+              "tool": "create_fit_card",
+              "status": "completed",
+              "duration_ms": 851.458
+            }
+          ],
+          "usage": {
+            "model_calls": 2,
+            "tokens": {
+              "prompt": 1713,
+              "output": 321,
+              "total": 2034
+            },
+            "cache_enabled": false,
+            "model": "gemini-3.5-flash-lite"
+          }
+        }
+      ]
+    }
+  ]
+}

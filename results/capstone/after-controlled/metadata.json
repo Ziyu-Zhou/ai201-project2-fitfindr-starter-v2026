@@ -1,0 +1,19 @@
+{
+  "phase": "after",
+  "mode": "controlled",
+  "started": "2026-11-18T06:07:35.955895+00:00",
+  "git_commit": "2e140bdcaac5b0851f4a01ca8a0fed1e08d9d9ed",
+  "python": "3.13.11 (main, Dec  5 2025, 16:06:33) [Clang 17.0.0 (clang-1700.4.4.1)]",
+  "model": "gemini-3.5-flash-lite",
+  "cache_enabled": false,
+  "source_sha256": {
+    "criteria.md": "34aac001c75c7edc5713cf7b72a871d75a6c4859a3db935cdb4e0b6ef6125934",
+    "agent.py": "726b14e48ef08c1fb616dbcb505dc49b439ecd47d0cef5b8546e40f57e48adfa",
+    "tools.py": "039d8fca5b3ff7461b3f4f304dae683ce355d1adf018362ce7bf5aba0d4e2584",
+    "generate.py": "58a9fc860e885e75da9e8aee8df918bba8fdf8f1ac282a3fbbc7e91d5eb7b1fe",
+    "run_log.py": "66f2e9129605fdf2a006e65938ed79ab62f79bc727697df86b25ef18cc52cc3f",
+    "capstone_eval.py": "7e53efd03da74ce10666ba341771ba97742a250d349b0c4ff2bc4c7349b94d20",
+    "requirements-capstone.txt": "bd075b3415eceff93796e59778ddbf84edbf3d517111ec345f761161cdf23abb"
+  },
+  "evidence_note": "Controlled provider fixtures/faults are labeled; all searches use real MCP."
+}

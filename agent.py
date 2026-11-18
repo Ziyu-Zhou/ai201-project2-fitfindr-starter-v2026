@@ -16,8 +16,12 @@ Build and test your three tools in `tools.py` first. Then come here.
 import math
 import re
 import time
+import uuid
+from datetime import datetime, timezone
 
 import trace
+import generate
+import run_log
 from tools import suggest_outfit, create_fit_card
 from generate import ModelUnavailable, QuotaGuard
 import mcp_client
@@ -154,7 +158,43 @@ def run_agent(query: str, wardrobe: dict, *, trace_enabled: bool = False) -> dic
     """
     trace.start_trace()
     session = new_session(query, wardrobe)
-    return _run_session(session, trace_enabled)
+    session["run_id"] = str(uuid.uuid4())
+    timestamp = datetime.now(timezone.utc).isoformat()
+    started = time.perf_counter()
+    tokens_before = generate.token_counts()
+    calls_before = generate.call_count()
+    try:
+        return _run_session(session, trace_enabled)
+    except Exception as error:
+        # Log programming/transport failures too, while preserving their exception.
+        session.update(status="failed", error=f"{type(error).__name__}: {error}",
+                       error_code="unexpected_error")
+        if session["steps"] and session["steps"][-1]["status"] == "failed":
+            session["error_stage"] = session["steps"][-1]["stage"]
+        raise
+    finally:
+        session["duration_ms"] = round((time.perf_counter() - started) * 1000, 3)
+        tokens_after = generate.token_counts()
+        session["usage"] = {
+            "model_calls": generate.call_count() - calls_before,
+            "tokens": {key: tokens_after[key] - tokens_before[key] for key in tokens_before},
+            "cache_enabled": config.CACHE_ENABLED,
+            "model": config.MODEL,
+        }
+        run_log.append({
+            "schema_version": 1,
+            "timestamp": timestamp,
+            "run_id": session["run_id"],
+            "input": {"query": query, "wardrobe": wardrobe},
+            "output": {key: session[key] for key in (
+                "selected_item", "outfit_suggestion", "fit_card", "error",
+                "error_stage", "error_code",
+            )},
+            "status": session["status"],
+            "duration_ms": session["duration_ms"],
+            "steps": session["steps"],
+            "usage": session["usage"],
+        })
 
 
 def _run_session(session, trace_enabled):

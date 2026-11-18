@@ -93,3 +93,6 @@ CACHE_DIR = ROOT / ".cache"
 
 DATA_DIR = ROOT / "data"
 RESULTS_DIR = ROOT / "results"
+
+# Live session logs are local; selected evaluation extracts are committed.
+RUN_LOG_PATH = Path(os.getenv("FITFINDR_RUN_LOG", str(ROOT / "logs" / "agent.jsonl")))

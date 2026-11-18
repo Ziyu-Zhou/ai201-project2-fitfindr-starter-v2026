@@ -15,6 +15,9 @@ env/
 # Cached model responses
 .cache/
 
+# Routine sessions are not capstone evidence. Commit selected results separately.
+logs/
+
 # OS noise
 .DS_Store
 Thumbs.db
